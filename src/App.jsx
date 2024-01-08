@@ -14,20 +14,24 @@ function App() {
       fullName,
       password,
     };
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    };
     try {
       const response = await fetch(
         "https://backendfortodo-production.up.railway.app/api/v1/users/register",
-        {
-          method: "POST",
-          body: JSON.stringify(data),
-        }
+        requestOptions
       );
       console.log("response done", response);
       if(!response.ok) throw new Error('Network response not ok');
       const responseData = await response.json();
       console.log("responseData", responseData);
     } catch (error) {
-      console.log("mongo error",error);
+      console.error("mongo error",error.message);
     }
   };
 
