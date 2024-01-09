@@ -1,0 +1,62 @@
+*{
+  margin: 0;
+  padding: 0;
+  color: white;
+}
+.img-container{
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cover-photo{
+  position: absolute;
+  z-index: -1;
+  max-width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.form{
+  height: max-content;
+  max-width: 350px;
+  width: 100%;
+  background-color: rgba(70, 169, 255, 0.123);
+  backdrop-filter: blur(30px);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+.formbody{
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+}
+input, button{
+  height: 40px;
+  border: none;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.699);
+  color: black;
+  padding: 0 10px;
+}
+
+input:focus-within{
+  border: 3px solid blue;
+}
+
+.username, .name, .email, .password{
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  height: 40px;
+  width: 100%;
+  background-color: rgba(127, 225, 255, 0.171);
+  backdrop-filter: blur(30px);
+}
+.name p, .email p, .username p, .password p{
+  width: 120px;
+  padding: 0 20px;
+}
