@@ -6,6 +6,23 @@ function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullname] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  let { emptyField, emailValidation } = new Boolean(true);
+  emailValidation = false;
+
+  const validateDetails = (username, email, fullName, password) => {
+    if (
+      [username, email, fullName, password].some((field) => field.trim() === "")
+    )
+      emptyField = true;
+    else emptyField = false;
+  };
+
+  const isValidEmail = (email) => {
+    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return regex.test(email);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,6 +32,7 @@ function App() {
       fullName,
       password,
     };
+    validateDetails(username, email, fullName, password);
     const requestOptions = {
       method: "POST",
       headers: {
@@ -22,17 +40,32 @@ function App() {
       },
       body: JSON.stringify(data),
     };
-    try {
-      const response = await fetch(
-        "http://localhost:8000/api/v1/users/register",
-        requestOptions
-      );
-      console.log("response done", response);
-      if (!response.ok) throw new Error("Network response not ok");
-      const responseData = await response.json();
-      console.log("responseData", responseData);
-    } catch (error) {
-      console.error("mongo error", error.message);
+    if (emptyField) {
+      setErrorMessage("All fields are required!");
+    } else if (!isValidEmail(email)) {
+      setErrorMessage("Email is not valid!");
+    } else {
+      try {
+        const response = await fetch(
+          "http://localhost:8000/api/v1/users/register",
+          requestOptions
+        );
+        console.log(response);
+        if (!response.ok) {
+          return response.json().catch((err) => {
+            if (response.status >= 400) {
+              setErrorMessage(
+                "User already exists with that username or email!"
+              );
+            }
+          });
+        }
+        else{
+          
+        }
+      } catch (error) {
+        console.error("Network error", error.message);
+      }
     }
   };
 
@@ -44,6 +77,7 @@ function App() {
       />
       <form method="post" className="form">
         <h1>Register yourself!</h1>
+        <p className="emptyErrorMSG">{errorMessage}</p>
         <div className="formbody">
           <div className="name">
             <p>Name</p>
@@ -55,6 +89,7 @@ function App() {
               }}
             />
           </div>
+          <p></p>
           <div className="email">
             <p>Email</p>
             <input
@@ -65,6 +100,7 @@ function App() {
               }}
             />
           </div>
+          <p></p>
           <div className="username">
             <p>Username</p>
             <input
@@ -75,6 +111,7 @@ function App() {
               }}
             />
           </div>
+          <p></p>
           <div className="password">
             <p>Password</p>
             <input
@@ -85,6 +122,7 @@ function App() {
               }}
             />
           </div>
+          <p></p>
           <div className="submit">
             <button onClick={handleSubmit}>Submit</button>
           </div>

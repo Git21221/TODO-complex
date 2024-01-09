@@ -9,7 +9,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  gap: 30px;
 }
+
 .cover-photo{
   position: absolute;
   z-index: -1;
@@ -30,6 +33,10 @@
   gap: 30px;
   border-radius: 20px;
 }
+.emptyErrorMSG{
+  font-weight: 400;
+  color: rgb(255, 127, 41);
+}
 .formbody{
   display: flex;
   gap: 20px;
@@ -47,10 +54,11 @@ input, button{
 }
 button{
   border-radius: 9999px;
+  font-size: 1.05rem;
 }
 
 input:focus-within{
-  border: 3px solid blue;
+  border: 3px solid rgb(35, 174, 255);
 }
 
 .username, .name, .email, .password{
@@ -66,4 +74,10 @@ input:focus-within{
 .name p, .email p, .username p, .password p{
   width: 120px;
   padding: 0 20px;
+}
+.name p::after, .email p::after, .username p::after, .password p::after{
+  position: absolute;
+  content: '*';
+  color: rgb(255, 137, 41);
+  font-size: 1.2rem;
 }
