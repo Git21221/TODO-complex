@@ -19,10 +19,10 @@ function App() {
     else emptyField = false;
   };
 
-  const isValidEmail = (email) => {
-    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    return regex.test(email);
-  };
+  // const isValidEmail = (email) => {
+  //   const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  //   return regex.test(email);
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,8 +42,6 @@ function App() {
     };
     if (emptyField) {
       setErrorMessage("All fields are required!");
-    } else if (!isValidEmail(email)) {
-      setErrorMessage("Email is not valid!");
     } else {
       try {
         const response = await fetch(
@@ -59,9 +57,6 @@ function App() {
               );
             }
           });
-        }
-        else{
-          
         }
       } catch (error) {
         console.error("Network error", error.message);
@@ -115,7 +110,7 @@ function App() {
           <div className="password">
             <p>Password</p>
             <input
-              type="text"
+              type="password"
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
