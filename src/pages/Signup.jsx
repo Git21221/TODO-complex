@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Input } from "../components/index.js";
 import validator from "validator";
+import { useNavigate } from "react-router-dom";
 
 function Signup() {
   const [message, setMessage] = useState("");
@@ -9,6 +10,8 @@ function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isValidEmail, setisValidEmail] = useState(true);
+
+const navigate = useNavigate();
 
   const data = { fullName, email, username, password };
 
@@ -42,6 +45,7 @@ function Signup() {
           );
       } else {
         setMessage("Registered successfully");
+        navigate('/login');
       }
     }
   };
