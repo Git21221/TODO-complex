@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Input } from "../components/index.js";
 import validator from "validator";
 import { useNavigate } from "react-router-dom";
+// import 'dotenv/config.js'
 
 function Signup() {
   const [message, setMessage] = useState("");
@@ -10,8 +11,10 @@ function Signup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isValidEmail, setisValidEmail] = useState(true);
+  const navigate = useNavigate();
 
-const navigate = useNavigate();
+  const localserver = import.meta.env.VITE_LOCALHOST_SERVER_LINK;
+  const hostedserver = import.meta.env.VITE_HOSTED_SERVER_LINK;
 
   const data = { fullName, email, username, password };
 
@@ -33,25 +36,17 @@ const navigate = useNavigate();
       setisValidEmail(false);
       setMessage("Email is not valid");
     } else {
-      const res = await fetch(
-        "http://localhost:8000/api/v1/users/register",
-        requestOptions
-      );
-      if (!res.ok) {
-        return res
-          .json()
-          .catch((err) =>
-            setMessage("User already exist with that username or email")
-          );
-      } else {
+      try {
+        const res = await fetch(`${localserver}/users/register` || `${hostedserver}/users/register`, requestOptions);
         setMessage("Registered successfully");
-        navigate('/login');
+        navigate("/login");
+      } catch (error) {
+        console.log(error.message);
       }
     }
   };
 
-  const cssAccTomsg =
-    !isValidEmail ? 'text-red-600' : 'text-emerald-800';
+  const cssAccTomsg = !isValidEmail ? "text-red-600" : "text-emerald-800";
 
   return (
     <div className='img-container h-screen w-screen flex items-center justify-center flex-col gap-8 bg-[url("/pexels-sebastian-coman-photography-3461205.jpg")] bg-cover bg-no-repeat bg-center -z-10 text-white'>

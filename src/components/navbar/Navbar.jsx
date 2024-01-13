@@ -16,7 +16,7 @@ function Navbar() {
       requestOptions
     );
   };
-  load();
+  // load();
   if (!res) {
     return (
       <div className="navBody fixed w-full flex justify-between items-center bg-zinc-950 bg-opacity-40 backdrop-blur-3xl text-white p-5">
