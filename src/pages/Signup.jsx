@@ -13,9 +13,9 @@ function Signup() {
   const [isValidEmail, setisValidEmail] = useState(true);
   const navigate = useNavigate();
 
-  const localserver = `${
-    import.meta.env.VITE_LOCALHOST_SERVER_LINK
-  }/users/register` || "";
+  let dev = true;
+  if(!import.meta.env.VITE_LOCALHOST_SERVER_LINK) dev = false;
+  const localserver = !dev ? "" : `${import.meta.env.VITE_LOCALHOST_SERVER_LINK}/users/register`;
   const hostedserver = `${
     import.meta.env.VITE_HOSTED_SERVER_LINK
   }/users/register`;
