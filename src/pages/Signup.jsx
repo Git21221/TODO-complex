@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Input } from "../components/index.js";
 import validator from "validator";
 import { useNavigate } from "react-router-dom";
-// import 'dotenv/config.js'
+// import 'dotenv/config'
 
 function Signup() {
   const [message, setMessage] = useState("");
@@ -13,8 +13,12 @@ function Signup() {
   const [isValidEmail, setisValidEmail] = useState(true);
   const navigate = useNavigate();
 
-  const localserver = `${import.meta.env.VITE_LOCALHOST_SERVER_LINK}/users/register`;
-  const hostedserver = `${import.meta.env.VITE_HOSTED_SERVER_LINK}/users/register`;
+  const localserver = `${
+    import.meta.env.VITE_LOCALHOST_SERVER_LINK
+  }/users/register`;
+  const hostedserver = `${
+    import.meta.env.VITE_HOSTED_SERVER_LINK
+  }/users/register`;
 
   const data = { fullName, email, username, password };
 
@@ -37,7 +41,7 @@ function Signup() {
       setMessage("Email is not valid");
     } else {
       try {
-        await fetch(localserver || hostedserver, requestOptions);
+        await fetch(hostedserver, requestOptions);
         setMessage("Registered successfully");
         navigate("/login");
       } catch (error) {
