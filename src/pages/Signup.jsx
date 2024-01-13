@@ -41,7 +41,7 @@ function Signup() {
       setMessage("Email is not valid");
     } else {
       try {
-        await fetch(hostedserver, requestOptions);
+        await fetch(localserver || hostedserver, requestOptions);
         setMessage("Registered successfully");
         navigate("/login");
       } catch (error) {
