@@ -8,8 +8,14 @@ function Signin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isValidEmail, setisValidEmail] = useState(true);
-
   const navigate = useNavigate();
+
+  let dev = true;
+  if (!import.meta.env.VITE_LOCALHOST_SERVER_LINK) dev = false;
+  const localserver = !dev
+    ? ""
+    : `${import.meta.env.VITE_LOCALHOST_SERVER_LINK}/users/login`;
+  const hostedserver = `${import.meta.env.VITE_HOSTED_SERVER_LINK}/users/login`;
 
   const email = username;
 
@@ -30,19 +36,13 @@ function Signin() {
     if ([username, password].some((field) => field === ""))
       setMessage("All fields are required!");
     else {
-      const res = await fetch(
-        "http://localhost:8000/api/v1/users/login",
-        requestOptions
-      );
-      if (!res.ok) {
-        return res
-          .json()
-          .catch((err) =>
-            setMessage("username or password is not valid")
-          );
-      } else {
-        setMessage("login successfully");
+      try {
+        const res = await fetch(localserver || hostedserver, requestOptions);
+        if (res.ok) setMessage("login successfully");
+        else setMessage("Username or password is wrong");
         navigate("/");
+      } catch (error) {
+        console.log(error.message);
       }
     }
   };

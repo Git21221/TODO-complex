@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 function Navbar() {
   const requestOptions = {
     method: "GET",
-    credentials: 'include',
     headers: {
       "Content-Type": "application/json",
     },
