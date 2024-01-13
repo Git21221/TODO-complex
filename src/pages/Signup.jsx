@@ -15,7 +15,7 @@ function Signup() {
 
   const localserver = `${
     import.meta.env.VITE_LOCALHOST_SERVER_LINK
-  }/users/register`;
+  }/users/register` || "";
   const hostedserver = `${
     import.meta.env.VITE_HOSTED_SERVER_LINK
   }/users/register`;
