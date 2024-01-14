@@ -30,11 +30,11 @@ const router = createBrowserRouter([
         element: <Signup />,
       },
       {
-        path: "/addtodo",
+        path: "/addTodo",
         element: <Addtodo />,
       },
       {
-        path: "/alltodos",
+        path: "/allTodos",
         element: <Alltodos />,
       },
     ],

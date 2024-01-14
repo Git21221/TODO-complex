@@ -77,7 +77,6 @@ function Navbar() {
           <li>
             <Link to="/profile">Profile</Link>
           </li>
-          <li>hello {userData.data.fullName}</li>
         </ul>
       </div>
     </div>
