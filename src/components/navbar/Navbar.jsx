@@ -18,7 +18,7 @@ function Navbar() {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
 
-  // useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
         let response = null;
@@ -38,7 +38,7 @@ function Navbar() {
     };
 
   fetchData();
-  // }, [userData, setUserData]);
+  }, [userData, setUserData]);
 
   console.log(userData);
 
