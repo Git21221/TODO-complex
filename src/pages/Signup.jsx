@@ -13,14 +13,14 @@ function Signup() {
   const navigate = useNavigate();
 
   const dev = import.meta.env.VITE_DEVELOPMENT_ENV;
+  console.log(dev);
   let localServer, hostedServer;
-  dev
-    ? (localServer = `${
-        import.meta.env.VITE_LOCALHOST_SERVER_LINK
-      }/users/register`)
-    : (hostedServer = `${
-        import.meta.env.VITE_HOSTED_SERVER_LINK
-      }/users/register`);
+  if (dev)
+    localServer = `${
+      import.meta.env.VITE_LOCALHOST_SERVER_LINK
+    }/users/register`;
+  else
+    hostedServer = `${import.meta.env.VITE_HOSTED_SERVER_LINK}/users/register`;
 
   const data = { fullName, email, username, password };
 
