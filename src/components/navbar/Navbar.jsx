@@ -38,9 +38,9 @@ function Navbar() {
     };
 
   fetchData();
-  }, []);
+  }, [userData, setUserData]);
 
-  // console.log(userData);
+  console.log(userData);
 
   if (!userData) {
     return (
