@@ -21,7 +21,7 @@ function Navbar() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let response;
+        let response = null;
         import.meta.env.VITE_DEVELOPMENT_ENV === "true"
           ? (response = await fetch(localServer, requestOptions))
           : await fetch(hostedServer, requestOptions);
