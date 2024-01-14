@@ -10,12 +10,10 @@ function Signin() {
   const [isValidEmail, setisValidEmail] = useState(true);
   const navigate = useNavigate();
 
-  let dev = true;
-  if (!import.meta.env.VITE_LOCALHOST_SERVER_LINK) dev = false;
-  const localserver = !dev
-    ? ""
-    : `${import.meta.env.VITE_LOCALHOST_SERVER_LINK}/users/login`;
-  const hostedserver = `${import.meta.env.VITE_HOSTED_SERVER_LINK}/users/login`;
+  const localServer = `${
+    import.meta.env.VITE_LOCALHOST_SERVER_LINK
+  }/users/login`;
+  const hostedServer = `${import.meta.env.VITE_HOSTED_SERVER_LINK}/users/login`;
 
   const email = username;
 
@@ -27,7 +25,7 @@ function Signin() {
     headers: {
       "Content-Type": "application/json",
     },
-    credentials: 'include'
+    credentials: "include",
   };
 
   const submitHandler = async (e) => {
@@ -38,7 +36,11 @@ function Signin() {
       setMessage("All fields are required!");
     else {
       try {
-        const res = await fetch(localserver || hostedserver, requestOptions);
+        let res;
+        import.meta.env.VITE_DEVELOPMENT_ENV
+          ? (res = await fetch(localServer, requestOptions))
+          : (res = await fetch(hostedServer, requestOptions));
+
         if (res.ok) setMessage("login successfully");
         else setMessage("Username or password is wrong");
         navigate("/");

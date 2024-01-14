@@ -14,6 +14,7 @@ function Navbar() {
       "http://localhost:8000/api/v1/users/getCurrentuser",
       requestOptions
     );
+    console.log(res);
   };
   // load();
   if (!res) {
