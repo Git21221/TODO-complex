@@ -12,14 +12,12 @@ function Signup() {
   const [isValidEmail, setisValidEmail] = useState(true);
   const navigate = useNavigate();
 
-  const dev = import.meta.env.VITE_DEVELOPMENT_ENV;
-  let localServer, hostedServer;
-  if (dev === 'true')
-    localServer = `${
-      import.meta.env.VITE_LOCALHOST_SERVER_LINK
-    }/users/register`;
-  else
-    hostedServer = `${import.meta.env.VITE_HOSTED_SERVER_LINK}/users/register`;
+  const localServer = `${
+    import.meta.env.VITE_LOCALHOST_SERVER_LINK
+  }/users/register`;
+  const hostedServer = `${
+    import.meta.env.VITE_HOSTED_SERVER_LINK
+  }/users/register`;
 
   const data = { fullName, email, username, password };
 
@@ -42,7 +40,10 @@ function Signup() {
       setMessage("Email is not valid");
     } else {
       try {
-        await fetch(localServer || hostedServer, requestOptions);
+        let res;
+        import.meta.env.VITE_DEVELOPMENT_ENV === "true"
+          ? (res = await fetch(localServer, requestOptions))
+          : (res = await fetch(hostedServer, requestOptions));
         setMessage("Registered successfully");
         navigate("/login");
       } catch (error) {
