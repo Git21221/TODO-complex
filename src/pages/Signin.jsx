@@ -10,6 +10,11 @@ function Signin() {
   const [isValidEmail, setisValidEmail] = useState(true);
   const navigate = useNavigate();
 
+  const localServer = `${
+    import.meta.env.VITE_LOCALHOST_SERVER_LINK
+  }/users/login`;
+  const hostedServer = `${import.meta.env.VITE_HOSTED_SERVER_LINK}/users/login`;
+
   const email = username;
 
   const data = { email, username, password };
