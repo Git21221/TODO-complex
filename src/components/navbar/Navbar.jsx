@@ -12,8 +12,8 @@ function Navbar() {
 
   const localServer = `${
     import.meta.env.VITE_LOCALHOST_SERVER_LINK
-  }/users/login`;
-  const hostedServer = `${import.meta.env.VITE_HOSTED_SERVER_LINK}/users/login`;
+  }/users/getCurrentuser`;
+  const hostedServer = `${import.meta.env.VITE_HOSTED_SERVER_LINK}/users/getCurrentuser`;
 
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
@@ -21,12 +21,10 @@ function Navbar() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          import.meta.env.VITE_DEVELOPMENT_ENV === "true"
-            ? localServer
-            : hostedServer,
-          requestOptions
-        );
+        let response;
+        import.meta.env.VITE_DEVELOPMENT_ENV === "true"
+          ? (response = await fetch(localServer, requestOptions))
+          : await fetch(hostedServer, requestOptions);
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
