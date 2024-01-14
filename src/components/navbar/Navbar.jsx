@@ -32,54 +32,55 @@ function Navbar() {
 
         const data = await response.json();
         setUserData(data);
+        console.log(data);
       } catch (error) {
         setError(error.message);
       }
     };
 
-  fetchData();
-  }, [userData, setUserData]);
-
-  console.log(userData);
-
-  if (!userData) {
+    fetchData();
+    
+      console.log(userData);
+    
+    }, []);
+    if (!userData) {
+      return (
+        <div className="navBody fixed w-full flex justify-between items-center bg-zinc-950 bg-opacity-40 backdrop-blur-3xl text-white p-5">
+          <div className="logoName">Todo</div>
+          <div className="menu">
+            <ul className="flex gap-4">
+              <li>
+                <Link to="/login">login</Link>
+              </li>
+              <li>
+                <Link to="/signup">Signup</Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      );
+    }
     return (
       <div className="navBody fixed w-full flex justify-between items-center bg-zinc-950 bg-opacity-40 backdrop-blur-3xl text-white p-5">
         <div className="logoName">Todo</div>
         <div className="menu">
           <ul className="flex gap-4">
             <li>
-              <Link to="/login">login</Link>
+              <Link to="/addTodo">Add Todo</Link>
             </li>
             <li>
-              <Link to="/signup">Signup</Link>
+              <Link to="/allTodos">All Todo</Link>
+            </li>
+            <li>
+              <Link to="/search">Search</Link>
+            </li>
+            <li>
+              <Link to="/profile">Profile</Link>
             </li>
           </ul>
         </div>
       </div>
     );
-  }
-  return (
-    <div className="navBody fixed w-full flex justify-between items-center bg-zinc-950 bg-opacity-40 backdrop-blur-3xl text-white p-5">
-      <div className="logoName">Todo</div>
-      <div className="menu">
-        <ul className="flex gap-4">
-          <li>
-            <Link to="/addTodo">Add Todo</Link>
-          </li>
-          <li>
-            <Link to="/allTodos">All Todo</Link>
-          </li>
-          <li>
-            <Link to="/search">Search</Link>
-          </li>
-          <li>
-            <Link to="/profile">Profile</Link>
-          </li>
-        </ul>
-      </div>
-    </div>
-  );
 }
 
 export default Navbar;
