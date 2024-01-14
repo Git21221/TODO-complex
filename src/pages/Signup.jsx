@@ -12,6 +12,8 @@ function Signup() {
   const [isValidEmail, setisValidEmail] = useState(true);
   const navigate = useNavigate();
 
+  const dev = import.meta.env.VITE_DEVELOPMENT_ENV;
+
   const localServer = `${
     import.meta.env.VITE_LOCALHOST_SERVER_LINK
   }/users/register`;
@@ -41,7 +43,7 @@ function Signup() {
       setMessage("Email is not valid");
     } else {
       try {
-        import.meta.env.VITE_DEVELOPMENT_ENV
+        dev
           ? await fetch(localServer, requestOptions)
           : await fetch(hostedServer, requestOptions);
         setMessage("Registered successfully");
