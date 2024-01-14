@@ -34,14 +34,13 @@ function Navbar() {
         setUserData(data);
       } catch (error) {
         setError(error.message);
-        console.log(error);
       }
     };
 
-    fetchData();
+  fetchData();
   }, []);
 
-  console.log(userData);
+  // console.log(userData);
 
   if (!userData) {
     return (
