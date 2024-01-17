@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "./navbar.css";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../../features/login/authSlice.js";
+
 function Navbar() {
+
+  const dispatch = useDispatch();
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
+
+  // console.log(user);
+
   const requestOptions = {
     method: "GET",
     headers: {
@@ -13,10 +22,9 @@ function Navbar() {
   const localServer = `${
     import.meta.env.VITE_LOCALHOST_SERVER_LINK
   }/users/getCurrentuser`;
-  const hostedServer = `${import.meta.env.VITE_HOSTED_SERVER_LINK}/users/getCurrentuser`;
-
-  const [userData, setUserData] = useState(null);
-  const [error, setError] = useState(null);
+  const hostedServer = `${
+    import.meta.env.VITE_HOSTED_SERVER_LINK
+  }/users/getCurrentuser`;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,57 +38,55 @@ function Navbar() {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const data = await response.json();
-        setUserData(data);
-        console.log(data);
+        const userData = await response.json();
+        dispatch(setUser(userData.data));
+        console.log(userData.data);
       } catch (error) {
-        setError(error.message);
+        console.log(error);
       }
     };
 
     fetchData();
-    
-      console.log(userData);
-    
-    }, [userData, setUserData]);
-    if (!userData) {
-      return (
-        <div className="navBody fixed w-full flex justify-between items-center bg-zinc-950 bg-opacity-40 backdrop-blur-3xl text-white p-5">
-          <div className="logoName">Todo</div>
-          <div className="menu">
-            <ul className="flex gap-4">
-              <li>
-                <Link to="/login">login</Link>
-              </li>
-              <li>
-                <Link to="/signup">Signup</Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      );
-    }
+  }, [dispatch]);
+
+  if (!isAuthenticated) {
     return (
       <div className="navBody fixed w-full flex justify-between items-center bg-zinc-950 bg-opacity-40 backdrop-blur-3xl text-white p-5">
         <div className="logoName">Todo</div>
         <div className="menu">
           <ul className="flex gap-4">
             <li>
-              <Link to="/addTodo">Add Todo</Link>
+              <Link to="/login">login</Link>
             </li>
             <li>
-              <Link to="/allTodos">All Todo</Link>
-            </li>
-            <li>
-              <Link to="/search">Search</Link>
-            </li>
-            <li>
-              <Link to="/profile">Profile</Link>
+              <Link to="/signup">Signup</Link>
             </li>
           </ul>
         </div>
       </div>
     );
+  }
+  return (
+    <div className="navBody fixed w-full flex justify-between items-center bg-zinc-950 bg-opacity-40 backdrop-blur-3xl text-white p-5">
+      <div className="logoName">Todo</div>
+      <div className="menu">
+        <ul className="flex gap-4">
+          <li>
+            <Link to="/addTodo">Add Todo</Link>
+          </li>
+          <li>
+            <Link to="/allTodos">All Todo</Link>
+          </li>
+          <li>
+            <Link to="/search">Search</Link>
+          </li>
+          <li>
+            <Link to="/profile">Profile {user.fullName}</Link>
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
 }
 
 export default Navbar;

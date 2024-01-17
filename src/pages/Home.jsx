@@ -1,9 +1,13 @@
-import React from 'react'
+const printBye = () => {
+  console.log("bye");
+};
 
 function Home() {
   return (
-    <div className='pt-16'>Home</div>
-  )
+    <div className="pt-16">
+      Home
+    </div>
+  );
 }
 
-export default Home
+export default Home;
