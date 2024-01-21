@@ -3,57 +3,15 @@ import "./navbar.css";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../../features/login/authSlice.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-regular-svg-icons";
 
 function Navbar() {
-
-  const dispatch = useDispatch();
   const { user, isAuthenticated } = useSelector((state) => state.auth);
-
-  // console.log(user);
-
-  const requestOptions = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-  };
-
-  const localServer = `${
-    import.meta.env.VITE_LOCALHOST_SERVER_LINK
-  }/users/getCurrentuser`;
-  const hostedServer = `${
-    import.meta.env.VITE_HOSTED_SERVER_LINK
-  }/users/getCurrentuser`;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let response = null;
-        import.meta.env.VITE_DEVELOPMENT_ENV === "true"
-          ? (response = await fetch(localServer, requestOptions))
-          : await fetch(hostedServer, requestOptions);
-
-          console.log(response);
-
-        if (!(response.ok)) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const userData = await response.json();
-        dispatch(setUser(userData.data));
-        console.log(userData.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
-  }, [dispatch]);
 
   if (!isAuthenticated) {
     return (
-      <div className="navBody fixed w-full flex justify-between items-center bg-zinc-950 bg-opacity-40 backdrop-blur-3xl text-white p-5">
+      <div className="navBody fixed w-full flex justify-between items-center bg-zinc-800  text-white p-5 z-50 border-gray-400">
         <div className="logoName">Todo</div>
         <div className="menu">
           <ul className="flex gap-4">
@@ -69,21 +27,31 @@ function Navbar() {
     );
   }
   return (
-    <div className="navBody fixed w-full flex justify-between items-center bg-zinc-950 bg-opacity-40 backdrop-blur-3xl text-white p-5">
+    <div className="navBody fixed w-full flex justify-between items-center bg-zinc-800 text-white p-5 z-50">
       <div className="logoName">Todo</div>
       <div className="menu">
         <ul className="flex gap-4">
           <li>
-            <Link to="/addTodo">Add Todo</Link>
+            <Link to="/addTodo">
+              <span>Add Todo</span>
+            </Link>
           </li>
           <li>
-            <Link to="/allTodos">All Todo</Link>
+            <Link to="/allTodos">
+              <span>All Todo</span>
+            </Link>
           </li>
           <li>
-            <Link to="/search">Search</Link>
+            <Link to="/search">
+              <span>Search</span>
+            </Link>
           </li>
           <li>
-            <Link to="/profile">Profile {user.fullName}</Link>
+            <Link to={`/${user.username}`}>
+              <span>
+                <FontAwesomeIcon icon={faUser} className="accountLogo" />
+              </span>
+            </Link>
           </li>
         </ul>
       </div>

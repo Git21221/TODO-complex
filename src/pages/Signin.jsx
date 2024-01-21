@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { Input } from "../components/index.js";
 import validator from "validator";
+import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../features/login/authSlice.js";
 
 function Signin() {
   const [message, setMessage] = useState("");
@@ -9,6 +12,8 @@ function Signin() {
   const [password, setPassword] = useState("");
   const [isValidEmail, setisValidEmail] = useState(true);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
 
   const localServer = `${
     import.meta.env.VITE_LOCALHOST_SERVER_LINK
@@ -37,12 +42,20 @@ function Signin() {
     else {
       try {
         let res;
-        import.meta.env.VITE_DEVELOPMENT_ENV === 'true'
+        import.meta.env.VITE_DEVELOPMENT_ENV === "true"
           ? (res = await fetch(localServer, requestOptions))
           : (res = await fetch(hostedServer, requestOptions));
 
         if (res.ok) setMessage("login successfully");
+
         else setMessage("Username or password is wrong");
+
+        const userData = await res.json();
+        
+        console.log(userData);
+
+        dispatch(setUser({ user: userData.data, isAuthenticated: true }));
+        
         navigate("/");
       } catch (error) {
         console.log(error.message);
@@ -53,8 +66,11 @@ function Signin() {
   const cssAccTomsg = !isValidEmail ? "text-red-600" : "text-emerald-800";
 
   return (
-    <div className='img-container h-screen w-screen flex items-center justify-center flex-col gap-8 bg-[url("/pexels-sebastian-coman-photography-3461205.jpg")] bg-cover bg-no-repeat bg-center -z-10 text-white'>
-      <div className="form bg-slate-100 p-10 rounded-2xl bg-opacity-40 backdrop-blur-3xl flex flex-col items-center justify-center gap-6">
+    <div className="img-container h-screen w-screen flex items-center justify-center flex-col gap-8 text-white">
+       <Helmet>
+          <title>Sign In | TODO</title>
+        </Helmet>
+      <div className="form bg-zinc-700 p-10 rounded-2xl bg-opacity-60 backdrop-blur-3xl flex flex-col items-center justify-center gap-6">
         <h1 className="text-3xl font-bold">Login</h1>
         <p className={cssAccTomsg}>{message}</p>
         <form
@@ -70,7 +86,6 @@ function Signin() {
             onChange={(e) => {
               setUsername(e.target.value);
             }}
-            className="py-2 px-4 text-black bg-slate-100 backdrop-blur-2xl rounded-3xl border-none"
           />
           <Input
             type="password"
@@ -78,10 +93,9 @@ function Signin() {
             onChange={(e) => {
               setPassword(e.target.value);
             }}
-            className="py-2 px-4 text-black bg-slate-100 backdrop-blur-2xl rounded-3xl border-none"
           />
           <button
-            className="bg-teal-100 rounded-3xl px-3 py-2 bg-opacity-30 backdrop-blur-3xl text-black"
+            className="bg-zinc-100 rounded-3xl px-3 py-2 bg-opacity-30 text-black hover:bg-zinc-50 transition-all font-bold"
             onClick={submitHandler}
           >
             Login

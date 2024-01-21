@@ -55,8 +55,8 @@ function Signup() {
   const cssAccTomsg = !isValidEmail ? "text-red-600" : "text-emerald-800";
 
   return (
-    <div className='img-container h-screen w-screen flex items-center justify-center flex-col gap-8 bg-[url("/pexels-sebastian-coman-photography-3461205.jpg")] bg-cover bg-no-repeat bg-center -z-10 text-white'>
-      <div className="form bg-slate-100 p-10 rounded-2xl bg-opacity-40 backdrop-blur-3xl flex flex-col items-center justify-center gap-6">
+    <div className="img-container h-screen w-screen flex items-center justify-center flex-col gap-8 text-white">
+      <div className="form bg-zinc-700 p-10 rounded-2xl bg-opacity-60 backdrop-blur-3xl flex flex-col items-center justify-center gap-6">
         <h1 className="text-3xl font-bold">Register yourself</h1>
         <p className={cssAccTomsg}>{message}</p>
         <form
@@ -72,7 +72,6 @@ function Signup() {
             onChange={(e) => {
               setName(e.target.value);
             }}
-            className="py-2 px-4 text-black bg-slate-100 backdrop-blur-2xl rounded-3xl border-none"
           />
           <Input
             type="text"
@@ -80,7 +79,6 @@ function Signup() {
             onChange={(e) => {
               setUsername(e.target.value);
             }}
-            className="py-2 px-4 text-black bg-slate-100 backdrop-blur-2xl rounded-3xl border-none"
           />
           <Input
             type="email"
@@ -88,7 +86,6 @@ function Signup() {
             onChange={(e) => {
               setEmail(e.target.value);
             }}
-            className="py-2 px-4 text-black bg-slate-100 backdrop-blur-2xl rounded-3xl border-none"
           />
           <Input
             type="password"
@@ -96,10 +93,9 @@ function Signup() {
             onChange={(e) => {
               setPassword(e.target.value);
             }}
-            className="py-2 px-4 text-black bg-slate-100 backdrop-blur-2xl rounded-3xl border-none"
           />
           <button
-            className="bg-teal-100 rounded-3xl px-3 py-2 bg-opacity-30 backdrop-blur-3xl text-black"
+            className="bg-zinc-100 rounded-3xl px-3 py-2 bg-opacity-30 text-black hover:bg-zinc-50 transition-all font-bold"
             onClick={submitHandler}
           >
             Register

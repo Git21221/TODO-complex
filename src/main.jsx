@@ -11,8 +11,10 @@ import {
 
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux";
-import { store } from "./store/store.js";
+import { Provider, useSelector } from "react-redux";
+import { persistor, store } from "./store/store.js";
+import Profile from "./pages/Profile.jsx";
+import { PersistGate } from "redux-persist/integration/react";
 
 const router = createBrowserRouter([
   {
@@ -39,12 +41,18 @@ const router = createBrowserRouter([
         path: "/allTodos",
         element: <Alltodos />,
       },
+      {
+        path: "/:username",
+        element: <Profile />,
+      },
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-    <RouterProvider router={router} />
+    <PersistGate loading={null} persistor={persistor}>
+      <RouterProvider router={router} />
+    </PersistGate>
   </Provider>
 );
