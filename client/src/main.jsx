@@ -7,13 +7,14 @@ import {
   Home,
   Signin,
   Signup,
+  Editprofile,
+  Profile
 } from "./components/index.js";
 
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { Provider, useSelector } from "react-redux";
+import { Provider } from "react-redux";
 import { persistor, store } from "./store/store.js";
-import Profile from "./pages/Profile.jsx";
 import { PersistGate } from "redux-persist/integration/react";
 
 const router = createBrowserRouter([
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
         path: "/:username",
         element: <Profile />,
       },
+      {
+        path: '/profile',
+        element: <Editprofile />
+      }
     ],
   },
 ]);

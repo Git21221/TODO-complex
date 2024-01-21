@@ -8,6 +8,8 @@ import Alltodos from "../pages/Alltodos.jsx";
 import Signin from "../pages/Signin.jsx";
 import Signup from "../pages/Signup.jsx";
 import Home from "../pages/Home.jsx";
+import Editprofile from "../pages/Editprofile.jsx";
+import Profile from "../pages/Profile.jsx";
 
 export {
   App,
@@ -20,4 +22,6 @@ export {
   Signin,
   Signup,
   Home,
+  Editprofile,
+  Profile
 };
