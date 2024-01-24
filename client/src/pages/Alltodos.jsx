@@ -30,7 +30,6 @@ function Alltodos() {
         import.meta.env.VITE_DEVELOPMENT_ENV === "true"
           ? (response = await fetch(localServer, requestOptions))
           : (response = await fetch(hostedServer, requestOptions));
-
         console.log(response);
 
         if (!response.ok) {
