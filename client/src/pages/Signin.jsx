@@ -46,16 +46,13 @@ function Signin() {
           ? (res = await fetch(localServer, requestOptions))
           : (res = await fetch(hostedServer, requestOptions));
 
-        if (res.ok) setMessage("login successfully");
-
-        else setMessage("Username or password is wrong");
-
         const userData = await res.json();
-        
-        console.log(userData);
 
-        dispatch(setUser({ user: userData.data, isAuthenticated: true }));
-        
+        if (res.ok) {
+          setMessage("login successfully");
+          dispatch(setUser({ user: userData.data, isAuthenticated: true }));
+        } else setMessage("Username or password is wrong");
+
         navigate("/");
       } catch (error) {
         console.log(error.message);
@@ -67,9 +64,9 @@ function Signin() {
 
   return (
     <div className="img-container h-screen w-screen flex items-center justify-center flex-col gap-8 text-white">
-       <Helmet>
-          <title>Sign In | TODO</title>
-        </Helmet>
+      <Helmet>
+        <title>Sign In | TODO</title>
+      </Helmet>
       <div className="form bg-zinc-700 p-10 rounded-2xl bg-opacity-60 backdrop-blur-3xl flex flex-col items-center justify-center gap-6">
         <h1 className="text-3xl font-bold">Login</h1>
         <p className={cssAccTomsg}>{message}</p>
