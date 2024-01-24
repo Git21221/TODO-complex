@@ -13,9 +13,6 @@ function Alltodos() {
 
   const requestOptions = {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
     credentials: "include",
   };
 
@@ -29,10 +26,12 @@ function Alltodos() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let response = null;
+        let response;
         import.meta.env.VITE_DEVELOPMENT_ENV === "true"
           ? (response = await fetch(localServer, requestOptions))
           : await fetch(hostedServer, requestOptions);
+
+        console.log(response);
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
