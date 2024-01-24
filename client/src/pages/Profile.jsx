@@ -18,7 +18,7 @@ function Profile() {
 
   const requestOptions = {
     method: "GET",
-    // credentials: "include",
+    credentials: "include",
   };
 
   const deleteProfile = async (e) => {

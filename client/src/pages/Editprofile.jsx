@@ -61,7 +61,7 @@ function Editprofile() {
   const requestOptions = {
     method: "POST",
     body: formdata,
-    // credentials: "include",
+    credentials: "include",
   };
   const submitHandler = async (e) => {
     e.preventDefault();
