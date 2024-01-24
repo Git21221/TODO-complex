@@ -1,6 +1,12 @@
+.form{
+  border: 1px solid rgb(71, 71, 71);
+}
 .er{
   height: calc(100vh - 100px);
 }
 .editAcc, .deleteAcc{
   border: 1px solid rgba(206, 206, 206, 0.61);
+}
+input[type="file"]{
+  display: none;
 }

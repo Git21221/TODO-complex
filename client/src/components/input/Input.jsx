@@ -1,10 +1,12 @@
-import React from "react";
-import './input.css'
+import React, {forwardRef} from "react";
+import "./input.css";
 
-function Input({ type, placeholder, className, onChange }) {
+const Input = forwardRef(({ type, placeholder, onChange, value }, ref) => {
   return (
     <div>
       <input
+        ref={ref}
+        value={value}
         type={type}
         placeholder={placeholder}
         className="input py-2 px-4 text-white bg-zinc-700 backdrop-blur-2xl rounded-3xl"
@@ -12,6 +14,6 @@ function Input({ type, placeholder, className, onChange }) {
       />
     </div>
   );
-}
+})
 
 export default Input;
