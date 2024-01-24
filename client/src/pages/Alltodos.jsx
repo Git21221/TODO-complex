@@ -29,7 +29,7 @@ function Alltodos() {
         let response;
         import.meta.env.VITE_DEVELOPMENT_ENV === "true"
           ? (response = await fetch(localServer, requestOptions))
-          : await fetch(hostedServer, requestOptions);
+          : (response = await fetch(hostedServer, requestOptions));
 
         console.log(response);
 
@@ -52,16 +52,16 @@ function Alltodos() {
     const handleEdit = () => {
       console.log("Hello");
     };
-  
+
     const addEventListeners = () => {
       // Query all elements with class "todoName" and add event listener to each
       document.querySelectorAll(".todoName").forEach((element) => {
         element.addEventListener("click", handleEdit);
       });
     };
-  
+
     addEventListeners(); // Call the function to add event listeners initially
-  
+
     return () => {
       // Remove event listeners when the component unmounts
       document.querySelectorAll(".todoName").forEach((element) => {
@@ -69,7 +69,6 @@ function Alltodos() {
       });
     };
   }, []); // Empty dependency array ensures that the effect runs once when the component mounts
-  
 
   return (
     <div className="flex items-center justify-center flex-wrap gap-8 bg-zinc-950 text-white pt-24 pb-10 bg-fixed">
