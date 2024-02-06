@@ -13,7 +13,7 @@ function Editprofile() {
   const [updatedDate, setDate] = useState(user.dateofBirth);
   const [updatedMonth, setMonth] = useState(user.monthofBirth);
   const [updatedYear, setYear] = useState(user.yearofBirth);
-  const [updatedGender, setGender] = useState(user.gender);
+  const [updatedGender, setGender] = useState("Male");
   const [imagetoShow, setimagetoShow] = useState("");
   const handleFileRef = useRef(null);
   const navigate = useNavigate();

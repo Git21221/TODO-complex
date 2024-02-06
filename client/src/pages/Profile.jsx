@@ -1,13 +1,15 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import "./handleCss.css";
 import { useNavigate } from "react-router-dom";
+import { setUser } from "../features/login/authSlice";
 
 function Profile() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const localServer = `${
     import.meta.env.VITE_LOCALHOST_SERVER_LINK
@@ -21,6 +23,18 @@ function Profile() {
     credentials: "include",
   };
 
+  const localServerLogout = `${
+    import.meta.env.VITE_LOCALHOST_SERVER_LINK
+  }/users/logout`;
+  const hostedServerLogout = `${
+    import.meta.env.VITE_HOSTED_SERVER_LINK
+  }/users/logout`;
+
+  const requestOptionslogout = {
+    method: "GET",
+    credentials: "include",
+  };
+
   const deleteProfile = async (e) => {
     e.preventDefault();
     try {
@@ -28,7 +42,23 @@ function Profile() {
       import.meta.env.VITE_DEVELOPMENT_ENV === "true"
         ? (res = await fetch(localServer, requestOptions))
         : (res = await fetch(hostedServer, requestOptions));
-      if(res.ok) navigate(`/signup`);
+      if (res.ok) navigate(`/signup`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const logout = async (e) => {
+    e.preventDefault();
+    try {
+      let res;
+      import.meta.env.VITE_DEVELOPMENT_ENV === "true"
+        ? (res = await fetch(localServerLogout, requestOptionslogout))
+        : (res = await fetch(hostedServerLogout, requestOptionslogout));
+      if (res.ok) {
+        dispatch(setUser({ user: null, isAuthenticated: false }));
+        navigate(`/login`);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -57,6 +87,12 @@ function Profile() {
           onClick={deleteProfile}
         >
           Delete Account
+        </div>
+        <div
+          className="logout p-2 hover:bg-zinc-800 rounded-lg"
+          onClick={logout}
+        >
+          log Out
         </div>
       </div>
       <div className="flex flex-col gap-4 w-full">
