@@ -6,7 +6,6 @@ import "./handleCss.css";
 import { Helmet } from "react-helmet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
-import { json } from "react-router-dom";
 
 function Alltodos() {
   const [editedTodoValue, setEditedTodoValue] = useState("");
