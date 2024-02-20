@@ -8,7 +8,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 
 function Alltodos() {
-  const [editedTodoValue, setEditedTodoValue] = useState("");
+  const [editedTodoName, setEditedTodoName] = useState("");
+  const [editedTodoDesc, setEditedTodoDesc] = useState("");
   const [editingTodoId, setEditingTodoId] = useState("");
   const dispatch = useDispatch();
   const { todo } = useSelector((state) => state.todo);
@@ -48,6 +49,7 @@ function Alltodos() {
         : (response = await fetch(hostedServer, requestOptions));
       if (response.ok) {
         const todos = await response.json();
+        console.log(todos);
         dispatch(setTodo(todos.data));
         setTodos(todos.data);
       }
@@ -71,7 +73,8 @@ function Alltodos() {
     setEditingTodoId(todoid);
     const editTodo = todos.find((todo) => todo._id === todoid);
     if (editTodo) {
-      setEditedTodoValue(editTodo.todoName);
+      setEditedTodoName(editTodo.todoName);
+      setEditedTodoDesc(editTodo.todoDesc);
     }
   };
 
@@ -81,13 +84,19 @@ function Alltodos() {
       if (todo._id === editingTodoId) {
         data = {
           todoid: todo._id,
-          todoname: editedTodoValue,
-          tododesc: todo.todoDesc,
+          todoname: editedTodoName,
+          tododesc: editedTodoDesc,
         };
-        return { ...todo, todoName: editedTodoValue };
+        return {
+          ...todo,
+          todoName: editedTodoName,
+          todoDesc: editedTodoDesc,
+          todoid: todo._id,
+        };
       }
       return todo;
     });
+    console.log(updatedTodos);
     setTodos(updatedTodos);
     dispatch(setTodo(updatedTodos));
     setEditingTodoId(null);
@@ -96,8 +105,8 @@ function Alltodos() {
       body: JSON.stringify(data),
       credentials: "include",
       headers: {
-        "Content-Type": "application/json"
-      }
+        "Content-Type": "application/json",
+      },
     };
     let res;
     import.meta.env.VITE_DEVELOPMENT_ENV === "true"
@@ -107,7 +116,7 @@ function Alltodos() {
   };
 
   return (
-    <div className="flex items-center justify-center flex-wrap gap-8 bg-zinc-950 text-white pt-24 pb-10 bg-fixed">
+    <div className="flex items-center justify-center flex-wrap gap-8 bg-zinc-950 text-white pt-24 pb-10 bg-fixed" key={todo._id}>
       <Helmet>
         <title>All Todos | TODO</title>
       </Helmet>
@@ -120,9 +129,9 @@ function Alltodos() {
             {editingTodoId === todo._id ? (
               <input
                 className="todoName bg-transparent focus-within: border-none"
-                value={editedTodoValue}
+                value={editedTodoName}
                 onChange={(e) => {
-                  setEditedTodoValue(e.target.value);
+                  setEditedTodoName(e.target.value);
                 }}
               />
             ) : (
@@ -137,7 +146,17 @@ function Alltodos() {
           </div>
 
           <hr className="border-1 border-gray-600 mt-2 mb-2" />
-          <p>{todo.todoDesc} </p>
+          {editingTodoId === todo._id ? (
+            <input
+              className="todoName bg-transparent focus-within: border-none"
+              value={editedTodoDesc}
+              onChange={(e) => {
+                setEditedTodoDesc(e.target.value);
+              }}
+            />
+          ) : (
+            <p>{todo.todoDesc} </p>
+          )}
           {editingTodoId === todo._id && (
             <button className="p-2" onClick={handleEditedTodoSave}>
               save
