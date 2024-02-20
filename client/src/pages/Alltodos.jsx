@@ -84,8 +84,8 @@ function Alltodos() {
       if (todo._id === editingTodoId) {
         data = {
           todoid: todo._id,
-          todoname: editedTodoName,
-          tododesc: editedTodoDesc,
+          todoName: editedTodoName,
+          todoDesc: editedTodoDesc,
         };
         return {
           ...todo,

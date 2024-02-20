@@ -44,7 +44,12 @@ const userSchema = new Schema(
     refreshToken: {
       type: String,
     },
-    todos: [],
+    todos: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "todos",
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -152,27 +152,16 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 
 const addTodo = asyncHandler(async (req, res) => {
   const { todoName, todoDesc } = req.body;
+  const ownerid = req.user._id;
 
   if ([todoName, todoDesc].some((field) => field === ""))
     throw new apiError(401, "All fields are required");
 
-  const createdtodo = await Todo.create({ todoName, todoDesc });
-
-  if (!createdtodo)
-    throw new apiError(401, "Something went wrong while creating todo");
-
-  await createdtodo.save();
-
-  const userid = req.user._id;
-
-  const user = await User.findById(userid);
-
-  user.todos.push(createdtodo);
-  await user.save();
+  const createdtodo = await Todo.create({ todoName, todoDesc, owner: ownerid });
 
   return res
     .status(200)
-    .json(new apiResponse(200, "todo added successfully", user));
+    .json(new apiResponse(200, "todo added successfully", createdtodo));
 });
 
 const alltodos = asyncHandler(async (req, res) => {
@@ -265,11 +254,11 @@ const logout = asyncHandler(async (req, res) => {
 });
 
 const editTodo = asyncHandler(async (req, res) => {
-  const { todoid, todoname, tododesc } = req.body;
+  const { todoid, todoName, todoDesc } = req.body;
 
   await Todo.findById(todoid).updateOne({
-    todoName: todoname,
-    todoDesc: tododesc,
+    todoName,
+    todoDesc,
   });
 
   return res.status(200).json(new apiResponse(200, "todo updated"));
