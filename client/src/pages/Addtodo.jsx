@@ -17,10 +17,10 @@ function Addtodo() {
 
     if ([todoName, todoDesc].some((field) => field === ""))
       console.log("all fields are required");
-    
+
     try {
       const res = await addtodo(data, "POST");
-      if(res.ok) navigate("/allTodos");
+      if (res.ok) navigate("/allTodos");
     } catch (error) {
       console.log(error);
     }

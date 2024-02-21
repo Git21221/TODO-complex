@@ -7,7 +7,7 @@ import { uploadOnCloudianry } from "../utils/cloudinary.js";
 import jwt from "jsonwebtoken";
 
 const options = {
-  maxAge: 24 * 60 * 60 * 1000,
+  maxAge: 60 * 1000,
   httpOnly: false,
   secure: true,
   sameSite: "None",
@@ -249,7 +249,7 @@ const logout = asyncHandler(async (req, res) => {
     }
   );
   res.clearCookie("accessToken", options);
-  res.clearCookie("refreshToken", options);
+  // res.clearCookie("refreshToken", options);
   return res.status(200).json(new apiResponse(200, "User loggedout", {}));
 });
 

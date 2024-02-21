@@ -118,11 +118,11 @@ const alltodos = async (method) => {
     import.meta.env.VITE_HOSTED_SERVER_LINK
   }/users/alltodos`;
 
-  let response;
+  let res;
   import.meta.env.VITE_DEVELOPMENT_ENV === "true"
-    ? (response = await fetch(localServer, requestOptions))
-    : (response = await fetch(hostedServer, requestOptions));
-  return response;
+    ? (res = await fetch(localServer, requestOptions))
+    : (res = await fetch(hostedServer, requestOptions));
+  return res;
 };
 
 const refreshuser = async (method) => {
@@ -167,10 +167,10 @@ const edittodo = async (data, method) => {
   import.meta.env.VITE_DEVELOPMENT_ENV === "true"
     ? (res = await fetch(localServer, requestOptions))
     : (res = await fetch(hostedServer, requestOptions));
-    return res;
+  return res;
 };
 
-const addtodo = async(data, method) => {
+const addtodo = async (data, method) => {
   const requestOptions = {
     method,
     body: JSON.stringify(data),
@@ -188,11 +188,32 @@ const addtodo = async(data, method) => {
   }/users/addTodo`;
 
   let res;
-      import.meta.env.VITE_DEVELOPMENT_ENV === "true"
-        ? (res = await fetch(localServer, requestOptions))
-        : (res = await fetch(hostedServer, requestOptions));
-      return res;
-}
+  import.meta.env.VITE_DEVELOPMENT_ENV === "true"
+    ? (res = await fetch(localServer, requestOptions))
+    : (res = await fetch(hostedServer, requestOptions));
+  return res;
+};
+
+const getcurrentuser = async (method) => {
+  const requestOptions = {
+    method,
+    credentials: "include",
+  };
+
+  const localServer = `${
+    import.meta.env.VITE_LOCALHOST_SERVER_LINK
+  }/users/getCurrentuser`;
+  const hostedServer = `${
+    import.meta.env.VITE_HOSTED_SERVER_LINK
+  }/users/getCurrentuser`;
+
+  let res;
+  import.meta.env.VITE_DEVELOPMENT_ENV === "true"
+    ? (res = await fetch(localServer, requestOptions))
+    : (res = await fetch(hostedServer, requestOptions));
+
+  return res;
+};
 
 export {
   register,
@@ -203,5 +224,6 @@ export {
   alltodos,
   refreshuser,
   edittodo,
-  addtodo
+  addtodo,
+  getcurrentuser
 };
