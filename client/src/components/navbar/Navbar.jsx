@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./navbar.css";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../features/login/authSlice.js";
+import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 

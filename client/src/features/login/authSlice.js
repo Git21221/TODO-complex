@@ -12,7 +12,7 @@ if(!res.ok){
 
 const initialState = {
   user: user? user.data : null,
-  isAuthenticated: user? true : false,
+  isAuthenticated: user ? true : false,
 };
 
 const authSlice = createSlice({
