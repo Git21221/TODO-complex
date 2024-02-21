@@ -4,6 +4,7 @@ import { Input } from "../components";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../features/login/authSlice";
+import { editprofile } from "../APIs/backend.api";
 
 function Editprofile() {
   const { user } = useSelector((state) => state.auth);
@@ -18,23 +19,6 @@ function Editprofile() {
   const handleFileRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  console.log(
-    updatedName,
-    updatedEmail,
-    updatedAvatar,
-    updatedDate,
-    updatedMonth,
-    updatedYear,
-    updatedGender
-  );
-
-  const localServer = `${
-    import.meta.env.VITE_LOCALHOST_SERVER_LINK
-  }/users/editProfile`;
-  const hostedServer = `${
-    import.meta.env.VITE_HOSTED_SERVER_LINK
-  }/users/editProfile`;
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -58,18 +42,10 @@ function Editprofile() {
   formdata.append("updatedYear", updatedYear);
   formdata.append("updatedGender", updatedGender);
 
-  const requestOptions = {
-    method: "POST",
-    body: formdata,
-    credentials: "include",
-  };
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      let res;
-      import.meta.env.VITE_DEVELOPMENT_ENV === "true"
-        ? (res = await fetch(localServer, requestOptions))
-        : (res = await fetch(hostedServer, requestOptions));
+      const res = await editprofile(formdata, "POST");
       const userData = await res.json();
       dispatch(setUser({ user: userData.data, isAuthenticated: true }));
       navigate(`/${user.username}`);

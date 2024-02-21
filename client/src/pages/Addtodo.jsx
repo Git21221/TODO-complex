@@ -4,40 +4,23 @@ import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 import "./handleCss.css";
+import { addtodo } from "../APIs/backend.api.js";
 function Addtodo() {
   const [todoName, setTodo] = useState("");
   const [todoDesc, setTodoDesc] = useState("");
   const navigate = useNavigate();
 
-  const localServer = `${
-    import.meta.env.VITE_LOCALHOST_SERVER_LINK
-  }/users/addTodo`;
-  const hostedServer = `${
-    import.meta.env.VITE_HOSTED_SERVER_LINK
-  }/users/addTodo`;
-
   const data = { todoName, todoDesc };
-
-  const requestOptions = {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log(data);
+
     if ([todoName, todoDesc].some((field) => field === ""))
       console.log("all fields are required");
+    
     try {
-      let res;
-      import.meta.env.VITE_DEVELOPMENT_ENV === "true"
-        ? (res = await fetch(localServer, requestOptions))
-        : (res = await fetch(hostedServer, requestOptions));
-      navigate("/allTodos");
+      const res = await addtodo(data, "POST");
+      if(res.ok) navigate("/allTodos");
     } catch (error) {
       console.log(error);
     }

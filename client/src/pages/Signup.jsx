@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Input } from "../components/index.js";
 import validator from "validator";
 import { useNavigate } from "react-router-dom";
+import { register } from "../APIs/backend.api.js";
 
 function Signup() {
   const [message, setMessage] = useState("");
@@ -12,22 +13,7 @@ function Signup() {
   const [isValidEmail, setisValidEmail] = useState(true);
   const navigate = useNavigate();
 
-  const localServer = `${
-    import.meta.env.VITE_LOCALHOST_SERVER_LINK
-  }/users/register`;
-  const hostedServer = `${
-    import.meta.env.VITE_HOSTED_SERVER_LINK
-  }/users/register`;
-
   const data = { fullName, email, username, password };
-
-  const requestOptions = {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
 
   const submitHandler = async (e) => {
     console.log(fullName, email, username, password);
@@ -40,10 +26,7 @@ function Signup() {
       setMessage("Email is not valid");
     } else {
       try {
-        let res;
-        import.meta.env.VITE_DEVELOPMENT_ENV === "true"
-          ? (res = await fetch(localServer, requestOptions))
-          : (res = await fetch(hostedServer, requestOptions));
+        const res = await register(data, "POST");
         setMessage("Registered successfully");
         navigate("/login");
       } catch (error) {

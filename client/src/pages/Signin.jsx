@@ -5,46 +5,29 @@ import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../features/login/authSlice.js";
+import { login } from "../APIs/backend.api.js";
 
 function Signin() {
   const [message, setMessage] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isValidEmail, setisValidEmail] = useState(true);
+  const [isValidEmail, setIsValidEmail] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, isAuthenticated } = useSelector((state) => state.auth);
-
-  const localServer = `${
-    import.meta.env.VITE_LOCALHOST_SERVER_LINK
-  }/users/login`;
-  const hostedServer = `${import.meta.env.VITE_HOSTED_SERVER_LINK}/users/login`;
 
   const email = username;
 
   const data = { email, username, password };
 
-  const requestOptions = {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-  };
-
   const submitHandler = async (e) => {
-    console.log(email, username, password);
+    e.preventDefault();
 
     //validate all details
     if ([username, password].some((field) => field === ""))
       setMessage("All fields are required!");
     else {
       try {
-        let res;
-        import.meta.env.VITE_DEVELOPMENT_ENV === "true"
-          ? (res = await fetch(localServer, requestOptions))
-          : (res = await fetch(hostedServer, requestOptions));
+        const res = await login(data, "POST");
 
         const userData = await res.json();
 

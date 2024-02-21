@@ -5,43 +5,17 @@ import { Link } from "react-router-dom";
 import "./handleCss.css";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../features/login/authSlice";
+import { deleteprofile, logoutUser } from "../APIs/backend.api";
 
 function Profile() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const localServer = `${
-    import.meta.env.VITE_LOCALHOST_SERVER_LINK
-  }/users/deleteProfile`;
-  const hostedServer = `${
-    import.meta.env.VITE_HOSTED_SERVER_LINK
-  }/users/deleteProfile`;
-
-  const requestOptions = {
-    method: "GET",
-    credentials: "include",
-  };
-
-  const localServerLogout = `${
-    import.meta.env.VITE_LOCALHOST_SERVER_LINK
-  }/users/logout`;
-  const hostedServerLogout = `${
-    import.meta.env.VITE_HOSTED_SERVER_LINK
-  }/users/logout`;
-
-  const requestOptionslogout = {
-    method: "GET",
-    credentials: "include",
-  };
-
   const deleteProfile = async (e) => {
     e.preventDefault();
     try {
-      let res;
-      import.meta.env.VITE_DEVELOPMENT_ENV === "true"
-        ? (res = await fetch(localServer, requestOptions))
-        : (res = await fetch(hostedServer, requestOptions));
+      const res = await deleteprofile("GET");
       if (res.ok) navigate(`/signup`);
     } catch (error) {
       console.log(error);
@@ -51,10 +25,7 @@ function Profile() {
   const logout = async (e) => {
     e.preventDefault();
     try {
-      let res;
-      import.meta.env.VITE_DEVELOPMENT_ENV === "true"
-        ? (res = await fetch(localServerLogout, requestOptionslogout))
-        : (res = await fetch(hostedServerLogout, requestOptionslogout));
+      const res = await logoutUser("GET");
       if (res.ok) {
         dispatch(setUser({ user: null, isAuthenticated: false }));
         navigate(`/login`);
