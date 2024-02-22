@@ -34,11 +34,12 @@ function Signin() {
         if (res.ok) {
           setMessage("login successfully");
           dispatch(setUser({ user: userData.data, isAuthenticated: true }));
+          navigate("/");
         } else setMessage("Username or password is wrong");
 
-        navigate("/");
       } catch (error) {
         console.log(error.message);
+        return null;
       }
     }
   };

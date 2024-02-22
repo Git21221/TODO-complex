@@ -6,6 +6,7 @@ import {
   editProfile,
   editTodo,
   getCurrentUser,
+  homepage,
   loginUser,
   logout,
   refreshAccessToken,
@@ -16,6 +17,7 @@ import { upload } from "../middlewares/multer.middleware.js";
 
 const router = Router();
 
+router.route("/").get(homepage);
 router.route("/register").post(registerUser);
 router.route("/login").post(loginUser);
 router.route("/getCurrentuser").get(verifyJWT, getCurrentUser);

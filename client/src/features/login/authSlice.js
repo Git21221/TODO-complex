@@ -2,18 +2,21 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getcurrentuser, refreshuser } from "../../APIs/backend.api";
 
 
-let user;
-const res = await getcurrentuser("GET");
-if(!res.ok){
-  const response = await refreshuser("GET");
-  if(!response.ok) user = null;
-}else user = await res.json();
+const initializeAuth = async () => {
+  let user;
+  const res = await getcurrentuser("GET");
+  if (!res.ok) {
+    const response = await refreshuser("GET");
+    if (!response.ok) user = null;
+  } else user = await res.json();
 
-
-const initialState = {
-  user: user? user.data : null,
-  isAuthenticated: user ? true : false,
+  return {
+    user: user ? user.data : null,
+    isAuthenticated: user ? true : false,
+  };
 };
+
+const initialState = await initializeAuth();
 
 const authSlice = createSlice({
   name: "auth",

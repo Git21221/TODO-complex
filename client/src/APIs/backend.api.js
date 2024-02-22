@@ -93,9 +93,8 @@ const editprofile = async (data, method) => {
   }/users/editProfile`;
 
   const requestOptions = {
-    method: method,
+    method,
     body: data,
-    mode: "cors",
     credentials: "include",
   };
 
