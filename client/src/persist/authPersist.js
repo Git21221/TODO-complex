@@ -3,6 +3,11 @@ const setAuth = (data) => {
   localStorage.setItem("isAuthenticated", JSON.stringify(true));
 };
 
+const setTodoStore = (data) => {
+  localStorage.setItem("todos", JSON.stringify(data));
+  localStorage.setItem("isChanged", JSON.stringify(true));
+}
+
 const removeAuth = () => {
   localStorage.setItem("user", JSON.stringify({}));
   localStorage.setItem("isAuthenticated", JSON.stringify(false));
@@ -14,4 +19,10 @@ const getAuth = () => {
   return {user, isAuthenticated};
 }
 
-export {setAuth, removeAuth, getAuth};
+const getTodo = () => {
+  const isChanged = JSON.parse(localStorage.getItem("isChanged"));
+  const todos = JSON.parse(localStorage.getItem("todos"));
+  return {isChanged, todos};
+}
+
+export {setAuth, setTodoStore, removeAuth, getAuth, getTodo};

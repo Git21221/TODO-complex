@@ -1,9 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getAuth } from "../../persist/authPersist";
+import Cookies from "js-cookie";
+import { refreshuser } from "../../APIs/backend.api";
 
-const {user, isAuthenticated} = getAuth();
-console.log(document.cookie.normalize());
+let { user, isAuthenticated } = getAuth();
+const accessToken = Cookies.get("accessToken");
+const refreshToken = Cookies.get("refreshToken");
 
+if (!accessToken) {
+  (async () => {
+    await refreshuser();
+  })();
+}
+if(!refreshToken){
+  user = {}, isAuthenticated= false;
+  Cookies.set('accessToken', "");
+}
 const initialState = {
   user,
   isAuthenticated,

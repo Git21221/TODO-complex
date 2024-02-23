@@ -1,43 +1,40 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setTodo } from "../features/todos/todoSlice.js";
-import { setUser } from "../features/login/authSlice.js";
 import "./handleCss.css";
 import { Helmet } from "react-helmet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
-import { alltodos, edittodo, refreshuser } from "../APIs/backend.api.js";
+import { alltodos, edittodo } from "../APIs/backend.api.js";
+import { getTodo, setTodoStore } from "../persist/authPersist.js";
 
 function Alltodos() {
   const [editedTodoName, setEditedTodoName] = useState("");
   const [editedTodoDesc, setEditedTodoDesc] = useState("");
   const [editingTodoId, setEditingTodoId] = useState("");
   const dispatch = useDispatch();
-  const { todo } = useSelector((state) => state.todo);
+  const { todo, isChanged } = useSelector((state) => state.todo);
   const {isAuthenticated} = useSelector(state => state.auth);
-  const [todos, setTodos] = useState([]);
-
+  const todos = getTodo().todos;
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await alltodos("GET");
-      if (response.ok) {
-        const todos = await response.json();
-        console.log(todos);
-        dispatch(setTodo(todos.data));
-        setTodos(todos.data);
+      console.log(response);
+      if(!response.ok){
+        dispatch(setTodo({todo: todos, isChanged: false}));
+        //also print server down, can't refresh your todos
       }
-      // if(!response.ok) console.log("nhi hoga");
-      if (!response.ok) {
-        const res = await refreshuser("GET");
-        if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
-        const userdata = await res.json();
-        dispatch(setUser({ user: userdata.data, isAuthenticated: true }));
-        console.log(userdata);
+      else {
+        const todos = await response.json();
+        dispatch(setTodo({todo: todos.data, isChanged: false})); //storing in store to spread
+        setTodoStore(todos.data); //storing in localstorage
       }
     };
     fetchData();
-  }, [dispatch]);
+  }, []);
+
+console.log(todo);
 
   const handleTodoEdit = (todoid) => {
     setEditingTodoId(todoid);

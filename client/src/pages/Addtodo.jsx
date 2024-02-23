@@ -5,7 +5,8 @@ import { Helmet } from "react-helmet";
 
 import "./handleCss.css";
 import { addtodo } from "../APIs/backend.api.js";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
 function Addtodo() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const [todoName, setTodo] = useState("");
@@ -22,7 +23,9 @@ function Addtodo() {
 
     try {
       const res = await addtodo(data, "POST");
-      if (res.ok) navigate("/allTodos");
+      if (res.ok){
+        navigate("/allTodos");
+      }
     } catch (error) {
       console.log(error);
     }
