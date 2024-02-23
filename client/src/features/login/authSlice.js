@@ -1,22 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getcurrentuser, refreshuser } from "../../APIs/backend.api";
+import { getAuth } from "../../persist/authPersist";
 
+const {user, isAuthenticated} = getAuth();
+console.log(document.cookie.normalize());
 
-const initializeAuth = async () => {
-  let user;
-  const res = await getcurrentuser("GET");
-  if (!res.ok) {
-    const response = await refreshuser("GET");
-    if (!response.ok) user = null;
-  } else user = await res.json();
-
-  return {
-    user: user ? user.data : null,
-    isAuthenticated: user ? true : false,
-  };
+const initialState = {
+  user,
+  isAuthenticated,
 };
-
-const initialState = await initializeAuth();
 
 const authSlice = createSlice({
   name: "auth",

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./navbar.css";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 
+
 function Navbar() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
-
+  const persist = localStorage.getItem("persist");
+  
   if (!isAuthenticated) {
     return (
       <div className="navBody fixed w-full flex justify-between items-center bg-zinc-800  text-white p-5 z-50 border-gray-400">

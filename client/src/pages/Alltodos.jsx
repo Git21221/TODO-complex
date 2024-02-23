@@ -14,7 +14,9 @@ function Alltodos() {
   const [editingTodoId, setEditingTodoId] = useState("");
   const dispatch = useDispatch();
   const { todo } = useSelector((state) => state.todo);
+  const {isAuthenticated} = useSelector(state => state.auth);
   const [todos, setTodos] = useState([]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,6 +78,7 @@ function Alltodos() {
   const handleEditedTodoCancel = () => {
     setEditingTodoId(null);
   }
+if(isAuthenticated){
 
   return (
     <div
@@ -137,6 +140,18 @@ function Alltodos() {
           )}
         </div>
       ))}
+    </div>
+  );
+}
+
+  return (
+    <div className="pt-16 h-screen flex items-center justify-center">
+      <Helmet>
+        <title>Home | TODO</title>
+      </Helmet>
+      <p className="font-extrabold text-7xl p-3">
+        signup ba login kor
+      </p>
     </div>
   );
 }

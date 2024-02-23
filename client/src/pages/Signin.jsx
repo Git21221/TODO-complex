@@ -3,9 +3,10 @@ import { Input } from "../components/index.js";
 import validator from "validator";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setUser } from "../features/login/authSlice.js";
 import { login } from "../APIs/backend.api.js";
+import { setAuth } from "../persist/authPersist.js";
 
 function Signin() {
   const [message, setMessage] = useState("");
@@ -34,9 +35,9 @@ function Signin() {
         if (res.ok) {
           setMessage("login successfully");
           dispatch(setUser({ user: userData.data, isAuthenticated: true }));
+          setAuth(userData.data);
           navigate("/");
         } else setMessage("Username or password is wrong");
-
       } catch (error) {
         console.log(error.message);
         return null;
