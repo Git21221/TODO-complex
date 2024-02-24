@@ -4,23 +4,23 @@ import Cookies from "js-cookie";
 import { refreshuser } from "../../APIs/backend.api";
 
 let { user, isAuthenticated } = getAuth();
-// const accessToken = Cookies.get("accessToken");
-// const refreshToken = Cookies.get("refreshToken");
-
-console.log(user, isAuthenticated);
-
-// if (!accessToken) {
-//   (async () => {
-//     await refreshuser();
-//   })();
-// }
-// if(!refreshToken){
-//   user = {}, isAuthenticated= false;
-// }
 const initialState = {
   user,
   isAuthenticated,
 };
+const accessToken = Cookies.get("accessToken");
+const refreshToken = Cookies.get("refreshToken");
+
+console.log(user, isAuthenticated);
+
+if (!accessToken) {
+  (async () => {
+    await refreshuser();
+  })();
+}
+if(!refreshToken){
+  user = {}, isAuthenticated= false;
+}
 
 console.log(initialState);
 
