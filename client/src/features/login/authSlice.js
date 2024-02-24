@@ -7,6 +7,8 @@ let { user, isAuthenticated } = getAuth();
 const accessToken = Cookies.get("accessToken");
 const refreshToken = Cookies.get("refreshToken");
 
+console.log(user, isAuthenticated);
+
 if (!accessToken) {
   (async () => {
     await refreshuser();
@@ -14,7 +16,6 @@ if (!accessToken) {
 }
 if(!refreshToken){
   user = {}, isAuthenticated= false;
-  Cookies.set('accessToken', "");
 }
 const initialState = {
   user,
