@@ -22,6 +22,8 @@ const initialState = {
   isAuthenticated,
 };
 
+console.log(initialState);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
