@@ -10,6 +10,9 @@ const initialState = {
 };
 const accessToken = Cookies.get("accessToken");
 const refreshToken = Cookies.get("refreshToken");
+if(!refreshToken){
+  user = {}, isAuthenticated= false;
+}
 
 console.log(user, isAuthenticated);
 
@@ -17,9 +20,6 @@ if (!accessToken) {
   (async () => {
     await refreshuser();
   })();
-}
-if(!refreshToken){
-  user = {}, isAuthenticated= false;
 }
 
 console.log(initialState);
