@@ -7,17 +7,17 @@ import { uploadOnCloudianry } from "../utils/cloudinary.js";
 import jwt from "jsonwebtoken";
 
 const accoptions = {
-  maxAge: 24 * 60 * 60 * 1000,
+  maxAge: 24 * 60 * 60 * 1000, //1 day validity
   httpOnly: false,
   secure: true,
-  sameSite: "None",
+  sameSite: "Lax",
   path: "/",
 };
 const refoptions = {
-  maxAge: 30 * 24 * 60 * 60 * 1000,
+  maxAge: 6 * 30 * 24 * 60 * 60 * 1000, //6 months validity
   httpOnly: false,
   secure: true,
-  sameSite: "None",
+  sameSite: "Lax",
   path: "/",
 };
 
