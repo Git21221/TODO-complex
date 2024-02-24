@@ -3,29 +3,12 @@ import { getAuth, removeAuth } from "../../persist/authPersist";
 import Cookies from "js-cookie";
 import { refreshuser } from "../../APIs/backend.api";
 
-const accessToken = Cookies.get("accessToken");
-const refreshToken = Cookies.get("refreshToken");
-
-if(!refreshToken){
-  removeAuth();
-}
-
 let { user, isAuthenticated } = getAuth();
 
 const initialState = {
   user,
   isAuthenticated,
 };
-
-console.log(user, isAuthenticated);
-
-if (!accessToken) {
-  (async () => {
-    await refreshuser();
-  })();
-}
-
-console.log(initialState);
 
 const authSlice = createSlice({
   name: "auth",
