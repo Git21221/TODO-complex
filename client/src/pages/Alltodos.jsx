@@ -18,12 +18,15 @@ function Alltodos() {
   const {isAuthenticated} = useSelector(state => state.auth);
   const [todos, setTodos] = useState([]);
 
-  useEffect(() => {
+  document.addEventListener('cookiechange', () => {
     if(!document.cookie){
       console.log("no cookie");
       removeAuth();
       dispatch(setUser({user: null, isAuthenticated: false}));
     }
+  })
+  
+  useEffect(() => {
     const fetchData = async () => {
       const response = await alltodos("GET");
       if(response.ok){

@@ -17,11 +17,13 @@ function Signup() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  if(!document.cookie){
-    console.log("no cookie");
-    removeAuth();
-    dispatch(setUser({user: null, isAuthenticated: false}));
-  }
+  document.addEventListener('cookiechange', () => {
+    if(!document.cookie){
+      console.log("no cookie");
+      removeAuth();
+      dispatch(setUser({user: null, isAuthenticated: false}));
+    }
+  })
 
   const data = { fullName, email, username, password };
 

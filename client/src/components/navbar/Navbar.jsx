@@ -11,12 +11,14 @@ import { setUser } from "../../features/login/authSlice";
 function Navbar() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  
-  if(!document.cookie){
-    console.log("no cookie");
-    removeAuth();
-    dispatch(setUser({user: null, isAuthenticated: false}));
-  }
+
+  document.addEventListener('cookiechange', () => {
+    if(!document.cookie){
+      console.log("no cookie");
+      removeAuth();
+      dispatch(setUser({user: null, isAuthenticated: false}));
+    }
+  })
   
   if (!isAuthenticated) {
     return (
