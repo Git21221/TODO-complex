@@ -9,7 +9,6 @@ import {
   homepage,
   loginUser,
   logout,
-  refreshAccessToken,
   registerUser,
 } from "../controller/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -29,6 +28,5 @@ router
 router.route("/deleteProfile").get(verifyJWT, deleteProfile);
 router.route("/logout").get(verifyJWT, logout);
 router.route("/editTodo").post(verifyJWT, editTodo);
-router.route("/refresh").get(refreshAccessToken);
 
 export default router;

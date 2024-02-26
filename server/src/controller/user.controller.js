@@ -23,17 +23,14 @@ const refoptions = {
 
 const homepage = (req, res) => {
   res.status(200).json("Hii");
-}
+};
 
 const generateAccessAndRefreshToken = async (userid) => {
   try {
     const user = await User.findById(userid);
-    console.log(user);
 
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
-
-    console.log(accessToken, refreshToken);
 
     if (!accessToken || !refreshToken)
       throw new apiError(400, "Error in rerfresh or access Token");
@@ -49,20 +46,16 @@ const generateAccessAndRefreshToken = async (userid) => {
   }
 };
 
-const refreshAccessToken = asyncHandler(async (req, res) => {
+const refreshAccessToken = async (req, res) => {
   try {
     const incomingRefreshToken = req?.cookies?.refreshToken;
 
     if (!incomingRefreshToken) throw new apiError(401, "Invalid refresh Token");
 
-    console.log(incomingRefreshToken);
-
     const decodedToken = jwt.verify(
       incomingRefreshToken,
       process.env.REFRESH_TOKEN_SECRET
     );
-
-    console.log(decodedToken);
 
     if (!decodedToken) throw new apiError(401, "failed to decode refreshToken");
 
@@ -79,16 +72,15 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
       user._id
     );
-    console.log(accessToken, refreshToken);
-    return res
-      .status(200)
+
+    res
       .cookie("accessToken", accessToken, accoptions)
-      .cookie("refreshToken", refreshToken, refoptions)
-      .json(new apiResponse(200, "Access token refreshed", user));
+      .cookie("refreshToken", refreshToken, refoptions);
+    return { accessToken, refreshToken };
   } catch (error) {
     throw new apiError(400, error?.message || "Invalid refreshToken");
   }
-});
+};
 
 const registerUser = asyncHandler(async (req, res) => {
   const { fullName, email, password, username } = req.body;
@@ -241,9 +233,11 @@ const editProfile = asyncHandler(async (req, res) => {
 
 const deleteProfile = asyncHandler(async (req, res) => {
   const result = await User.deleteOne(req.user._id);
-  // if (result.deletedCount === 1)
+
   return res
     .status(200)
+    .clearCookie("accessToken", accoptions)
+    .clearCookie("refreshToken", refoptions)
     .json(new apiResponse(200, "User deleted successfully", result));
 });
 
@@ -259,9 +253,11 @@ const logout = asyncHandler(async (req, res) => {
       new: true,
     }
   );
-  res.clearCookie("accessToken", accoptions);
-  res.clearCookie("refreshToken", refoptions);
-  return res.status(200).json(new apiResponse(200, "User loggedout", {}));
+  return res
+    .status(200)
+    .clearCookie("accessToken", accoptions)
+    .clearCookie("refreshToken", refoptions)
+    .json(new apiResponse(200, "User loggedout", {}));
 });
 
 const editTodo = asyncHandler(async (req, res) => {
@@ -286,5 +282,5 @@ export {
   logout,
   editTodo,
   refreshAccessToken,
-  homepage
+  homepage,
 };

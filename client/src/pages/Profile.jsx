@@ -17,7 +17,11 @@ function Profile() {
     e.preventDefault();
     try {
       const res = await deleteprofile("GET");
-      if (res.ok) navigate(`/signup`);
+      if (res.ok){
+        dispatch(setUser({user: null, isAuthenticated: false}));
+        removeAuth();
+        navigate(`/signup`);
+      }
     } catch (error) {
       console.log(error);
     }

@@ -6,33 +6,32 @@ import { Helmet } from "react-helmet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { alltodos, edittodo } from "../APIs/backend.api.js";
-import { getTodo, setTodoStore } from "../persist/authPersist.js";
 
 function Alltodos() {
   const [editedTodoName, setEditedTodoName] = useState("");
   const [editedTodoDesc, setEditedTodoDesc] = useState("");
   const [editingTodoId, setEditingTodoId] = useState("");
   const dispatch = useDispatch();
-  const { todo, isChanged } = useSelector((state) => state.todo);
+  const { todo } = useSelector((state) => state.todo);
   const {isAuthenticated} = useSelector(state => state.auth);
-  const todos = getTodo().todos;
+  const [todos, setTodos] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await alltodos("GET");
-      console.log(response);
       if(!response.ok){
-        dispatch(setTodo({todo: todos, isChanged: false}));
+        // dispatch(setTodo({todo: todos, isChanged: false}));
         //also print server down, can't refresh your todos
       }
       else {
-        const todos = await response.json();
-        dispatch(setTodo({todo: todos.data, isChanged: false})); //storing in store to spread
-        setTodoStore(todos.data); //storing in localstorage
+        const incomingTodos = await response.json();
+        dispatch(setTodo({todo: incomingTodos.data, isChanged: false})); //storing in store to spread
+        setTodos(incomingTodos.data);
+        setTodo(incomingTodos.data);
       }
     };
     fetchData();
-  }, []);
+  }, [dispatch]);
 
 console.log(todo);
 
@@ -47,7 +46,8 @@ console.log(todo);
 
   const handleEditedTodoSave = async () => {
     let data;
-    const updatedTodos = todos.map((todo) => {
+    console.log(todos);
+    const updatedTodos = todo.map((todo) => {
       if (todo._id === editingTodoId) {
         data = {
           todoid: todo._id,
@@ -63,9 +63,8 @@ console.log(todo);
       }
       return todo;
     });
-    console.log(updatedTodos);
     setTodos(updatedTodos);
-    dispatch(setTodo(updatedTodos));
+    dispatch(setTodo({todo: updatedTodos}));
     setEditingTodoId(null);
 
     const res = await edittodo(data, "POST");
@@ -76,7 +75,6 @@ console.log(todo);
     setEditingTodoId(null);
   }
 if(isAuthenticated){
-
   return (
     <div
       className="flex items-center justify-center flex-wrap gap-8 bg-zinc-950 text-white pt-24 pb-10 bg-fixed"

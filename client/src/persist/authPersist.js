@@ -1,12 +1,9 @@
+// import Cookies from 'js-Cookie';
+
 const setAuth = (data) => {
   localStorage.setItem("user", JSON.stringify(data));
   localStorage.setItem("isAuthenticated", JSON.stringify(true));
 };
-
-const setTodoStore = (data) => {
-  localStorage.setItem("todos", JSON.stringify(data));
-  localStorage.setItem("isChanged", JSON.stringify(true));
-}
 
 const removeAuth = () => {
   localStorage.setItem("user", JSON.stringify({}));
@@ -15,14 +12,10 @@ const removeAuth = () => {
 
 const getAuth = () => {
   const isAuthenticated = JSON.parse(localStorage.getItem("isAuthenticated"));
+  // console.log(Cookies.get('accessToken'));
   const user = JSON.parse(localStorage.getItem("user"));
   return {user, isAuthenticated};
 }
 
-const getTodo = () => {
-  const isChanged = JSON.parse(localStorage.getItem("isChanged"));
-  const todos = JSON.parse(localStorage.getItem("todos"));
-  return {isChanged, todos};
-}
 
-export {setAuth, setTodoStore, removeAuth, getAuth, getTodo};
+export {setAuth, removeAuth, getAuth};

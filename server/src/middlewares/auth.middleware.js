@@ -1,15 +1,41 @@
+import { refreshAccessToken } from "../controller/user.controller.js";
 import { User } from "../model/user.model.js";
 import { apiError } from "../utils/apiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
 
-const verifyJWT = asyncHandler(async (req, _, next) => {
+const verifyJWT = asyncHandler(async (req, res, next) => {
+  const accoptions = {
+    maxAge: 24 * 60 * 60 * 1000, //1 day validity
+    httpOnly: false,
+    secure: true,
+    sameSite: "Lax",
+    path: "/",
+  };
+
+  const refoptions = {
+    maxAge: 6 * 30 * 24 * 60 * 60 * 1000, //6 months validity
+    httpOnly: false,
+    secure: true,
+    sameSite: "Lax",
+    path: "/",
+  };
+
   try {
-    const token = req?.cookies?.accessToken;
+    let token;
+    if (req?.cookies?.accessToken) {
+      token = req?.cookies?.accessToken;
+    } else if (req?.cookies?.refreshToken) {
+      token = req?.cookies?.refreshToken;
+      const { accessToken, refreshToken } = await refreshAccessToken(req, res);
+      token = accessToken;
+    }
 
     if (!token) throw new apiError(401, "Invalid authorization request!");
 
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+
+    console.log(decodedToken);
 
     const userid = decodedToken._id;
 
@@ -18,9 +44,10 @@ const verifyJWT = asyncHandler(async (req, _, next) => {
     if (!user) throw new apiError(401, "Invalid access token");
 
     req.user = user;
+
     next();
   } catch (error) {
-    throw new apiError(400, error.message || "problem in verify")
+    throw new apiError(400, error.message || "problem in verify");
   }
 });
 
