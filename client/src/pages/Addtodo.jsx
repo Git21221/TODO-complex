@@ -2,12 +2,19 @@ import React, { useState, useEffect } from "react";
 import { Input } from "../components/index.js";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
-
+import { removeAuth } from "../persist/authPersist.js";
 import "./handleCss.css";
 import { addtodo } from "../APIs/backend.api.js";
 import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "../features/login/authSlice.js";
 
 function Addtodo() {
+  const dispatch = useDispatch();
+  if(!document.cookie){
+    console.log("no cookie");
+    removeAuth();
+    dispatch(setUser({user: null, isAuthenticated: false}));
+  }
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const [todoName, setTodo] = useState("");
   const [todoDesc, setTodoDesc] = useState("");

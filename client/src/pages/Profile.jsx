@@ -13,6 +13,12 @@ function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  if(!document.cookie){
+    console.log("no cookie");
+    removeAuth();
+    dispatch(setUser({user: null, isAuthenticated: false}));
+  }
+
   const deleteProfile = async (e) => {
     e.preventDefault();
     try {

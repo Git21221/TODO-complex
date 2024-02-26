@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../features/login/authSlice.js";
 import { login } from "../APIs/backend.api.js";
-import { setAuth } from "../persist/authPersist.js";
+import { removeAuth, setAuth } from "../persist/authPersist.js";
 
 function Signin() {
   const [message, setMessage] = useState("");
@@ -15,6 +15,12 @@ function Signin() {
   const [isValidEmail, setIsValidEmail] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  if(!document.cookie){
+    console.log("no cookie");
+    removeAuth();
+    dispatch(setUser({user: null, isAuthenticated: false}));
+  }
 
   const email = username;
 

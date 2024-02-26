@@ -3,6 +3,9 @@ import { Input } from "../components/index.js";
 import validator from "validator";
 import { useNavigate } from "react-router-dom";
 import { register } from "../APIs/backend.api.js";
+import { useDispatch } from "react-redux";
+import { setUser } from "../features/login/authSlice.js";
+import { removeAuth } from "../persist/authPersist.js";
 
 function Signup() {
   const [message, setMessage] = useState("");
@@ -12,6 +15,13 @@ function Signup() {
   const [password, setPassword] = useState("");
   const [isValidEmail, setisValidEmail] = useState(true);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  if(!document.cookie){
+    console.log("no cookie");
+    removeAuth();
+    dispatch(setUser({user: null, isAuthenticated: false}));
+  }
 
   const data = { fullName, email, username, password };
 

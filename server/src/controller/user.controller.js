@@ -10,14 +10,14 @@ const accoptions = {
   maxAge: 24 * 60 * 60 * 1000, //1 day validity
   httpOnly: false,
   secure: true,
-  sameSite: "Lax",
+  sameSite: "None",
   path: "/",
 };
 const refoptions = {
   maxAge: 6 * 30 * 24 * 60 * 60 * 1000, //6 months validity
   httpOnly: false,
   secure: true,
-  sameSite: "Lax",
+  sameSite: "None",
   path: "/",
 };
 

@@ -6,6 +6,8 @@ import { Helmet } from "react-helmet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { alltodos, edittodo } from "../APIs/backend.api.js";
+import { removeAuth } from "../persist/authPersist.js";
+import { setUser } from "../features/login/authSlice.js";
 
 function Alltodos() {
   const [editedTodoName, setEditedTodoName] = useState("");
@@ -17,13 +19,14 @@ function Alltodos() {
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
+    if(!document.cookie){
+      console.log("no cookie");
+      removeAuth();
+      dispatch(setUser({user: null, isAuthenticated: false}));
+    }
     const fetchData = async () => {
       const response = await alltodos("GET");
-      if(!response.ok){
-        // dispatch(setTodo({todo: todos, isChanged: false}));
-        //also print server down, can't refresh your todos
-      }
-      else {
+      if(response.ok){
         const incomingTodos = await response.json();
         dispatch(setTodo({todo: incomingTodos.data, isChanged: false})); //storing in store to spread
         setTodos(incomingTodos.data);

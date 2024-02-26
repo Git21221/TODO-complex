@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../features/login/authSlice";
 import { editprofile } from "../APIs/backend.api";
+import { removeAuth } from "../persist/authPersist";
 
 function Editprofile() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -19,6 +20,12 @@ function Editprofile() {
   const handleFileRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  if(!document.cookie){
+    console.log("no cookie");
+    removeAuth();
+    dispatch(setUser({user: null, isAuthenticated: false}));
+  }
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
