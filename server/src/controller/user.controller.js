@@ -6,14 +6,14 @@ import { Todo } from "../model/todo.model.js";
 import { uploadOnCloudianry } from "../utils/cloudinary.js";
 import jwt from "jsonwebtoken";
 
-const accoptions = {
+const accessTokenOptions = {
   maxAge: 24 * 60 * 60 * 1000, //1 day validity
   httpOnly: false,
   secure: true,
   sameSite: "None",
   path: "/",
 };
-const refoptions = {
+const refreshTokenOptions = {
   maxAge: 6 * 30 * 24 * 60 * 60 * 1000, //6 months validity
   httpOnly: false,
   secure: true,
@@ -74,8 +74,8 @@ const refreshAccessToken = async (req, res) => {
     );
 
     res
-      .cookie("accessToken", accessToken, accoptions)
-      .cookie("refreshToken", refreshToken, refoptions);
+      .cookie("accessToken", accessToken, accessTokenOptions)
+      .cookie("refreshToken", refreshToken, refreshTokenOptions);
     return { accessToken, refreshToken };
   } catch (error) {
     throw new apiError(400, error?.message || "Invalid refreshToken");
@@ -86,7 +86,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const { fullName, email, password, username } = req.body;
 
   if ([fullName, email, password, username].some((field) => field === ""))
-    throw new apiError(401, "All fields are required!");
+    return res.status(400).json(new apiError(400, "All fields are required!"));
 
   const existedUser = await User.findOne(
     {
@@ -95,10 +95,7 @@ const registerUser = asyncHandler(async (req, res) => {
     { new: true }
   );
   if (existedUser)
-    throw new apiError(
-      400,
-      "User already exist with that email id or username!"
-    );
+    return res.status(401).json(new apiError(400, "User already exist!"));
 
   const user = await User.create({
     fullName,
@@ -123,7 +120,7 @@ const loginUser = asyncHandler(async (req, res) => {
   });
 
   if (!user)
-    throw new apiError(401, "Didn't find user with that username or email");
+    return res.status(401).json(new apiError(401, "Wrong username or email"));
 
   const checkPass = await user.isPasswordCorrect(password);
   if (!checkPass) throw new apiError(400, "password do not match");
@@ -137,15 +134,15 @@ const loginUser = asyncHandler(async (req, res) => {
   );
 
   try {
-    res.cookie("accessToken", accessToken, accoptions);
-    res.cookie("refreshToken", refreshToken, refoptions);
+    res.cookie("accessToken", accessToken, accessTokenOptions);
+    res.cookie("refreshToken", refreshToken, refreshTokenOptions);
   } catch (error) {
     console.log(error.message);
   }
 
   return res
     .status(200)
-    .json(new apiResponse(200, "Loggedin successfully", loggedinUser));
+    .json(new apiResponse(200, "Login successful", loggedinUser));
 });
 
 const getCurrentUser = asyncHandler(async (req, res) => {
@@ -236,8 +233,8 @@ const deleteProfile = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .clearCookie("accessToken", accoptions)
-    .clearCookie("refreshToken", refoptions)
+    .clearCookie("accessToken", accessTokenOptions)
+    .clearCookie("refreshToken", refreshTokenOptions)
     .json(new apiResponse(200, "User deleted successfully", result));
 });
 
@@ -255,8 +252,8 @@ const logout = asyncHandler(async (req, res) => {
   );
   return res
     .status(200)
-    .clearCookie("accessToken", accoptions)
-    .clearCookie("refreshToken", refoptions)
+    .clearCookie("accessToken", accessTokenOptions)
+    .clearCookie("refreshToken", refreshTokenOptions)
     .json(new apiResponse(200, "User loggedout", {}));
 });
 

@@ -1,7 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAuth, removeAuth } from "../../persist/authPersist";
-// import Cookies from "js-cookie";
-import { refreshuser } from "../../APIs/backend.api";
+import { getAuth } from "../../persist/authPersist";
 
 let { user, isAuthenticated } = getAuth();
 

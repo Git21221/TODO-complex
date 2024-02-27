@@ -10,6 +10,7 @@ import Signup from "../pages/Signup.jsx";
 import Home from "../pages/Home.jsx";
 import Editprofile from "../pages/Editprofile.jsx";
 import Profile from "../pages/Profile.jsx";
+import Loader from "./loader/Loader.jsx";
 
 export {
   App,
@@ -23,5 +24,6 @@ export {
   Signup,
   Home,
   Editprofile,
-  Profile
+  Profile,
+  Loader
 };

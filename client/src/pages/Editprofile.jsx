@@ -8,7 +8,6 @@ import { editprofile } from "../APIs/backend.api";
 import { removeAuth } from "../persist/authPersist";
 
 function Editprofile() {
-  
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const [updatedName, setName] = useState(user?.fullName || "");
   const [updatedEmail, setEmail] = useState(user?.email || "");

@@ -6,9 +6,10 @@ import { register } from "../APIs/backend.api.js";
 import { useDispatch } from "react-redux";
 import { setUser } from "../features/login/authSlice.js";
 import { removeAuth } from "../persist/authPersist.js";
+import { setError, setSuccess } from "../features/messageSlice.js";
+import { setLoading } from "../features/loadingSlice.js";
 
 function Signup() {
-  const [message, setMessage] = useState("");
   const [fullName, setName] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -17,43 +18,51 @@ function Signup() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  document.addEventListener('cookiechange', () => {
-    if(!document.cookie){
+  document.addEventListener("cookiechange", () => {
+    if (!document.cookie) {
       console.log("no cookie");
       removeAuth();
-      dispatch(setUser({user: null, isAuthenticated: false}));
+      dispatch(setUser({ user: null, isAuthenticated: false }));
     }
-  })
+  });
 
   const data = { fullName, email, username, password };
 
   const submitHandler = async (e) => {
-    console.log(fullName, email, username, password);
-
-    //validate all details
-    if ([username, fullName, password, email].some((field) => field === ""))
-      setMessage("All fields are required!");
-    else if (!validator.isEmail(email)) {
-      setisValidEmail(false);
-      setMessage("Email is not valid");
-    } else {
-      try {
-        const res = await register(data, "POST");
-        setMessage("Registered successfully");
+    e.preventDefault();
+    try {
+      const res = await register(data, "POST");
+      const userData = await res.json();
+      console.log(userData);
+      if (res.ok) {
+        dispatch(setLoading({ isLoading: true }));
+        dispatch(
+          setSuccess({
+            isMessage: true,
+            message: userData.message,
+            type: "success",
+          })
+        );
         navigate("/login");
-      } catch (error) {
-        console.log(error.message);
+      } else {
+        dispatch(setLoading({ isLoading: false }));
+        dispatch(
+          setError({
+            isMessage: true,
+            message: userData.message,
+            type: "error",
+          })
+        );
       }
+    } catch (error) {
+      console.log(error.message);
     }
   };
-
-  const cssAccTomsg = !isValidEmail ? "text-red-600" : "text-emerald-800";
 
   return (
     <div className="img-container h-screen w-screen flex items-center justify-center flex-col gap-8 text-white">
       <div className="form bg-zinc-700 p-10 rounded-2xl bg-opacity-60 backdrop-blur-3xl flex flex-col items-center justify-center gap-6">
         <h1 className="text-3xl font-bold">Register yourself</h1>
-        <p className={cssAccTomsg}>{message}</p>
         <form
           method="post"
           className="flex flex-col gap-6"
