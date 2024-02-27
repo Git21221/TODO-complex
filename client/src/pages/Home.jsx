@@ -12,7 +12,7 @@ function Home() {
     if (
       (Cookie.get("accesToken") == undefined &&
         Cookie.get("refreshToken") == undefined) ||
-      (!Cookie.get("accessToken") && !Cookie.get("refreshToken"))
+      (Cookie.get("accessToken") == "" && Cookie.get("refreshToken") == "")
     ) {
       removeAuth();
       dispatch(setUser({ user: null, isAuthenticated: false }));
