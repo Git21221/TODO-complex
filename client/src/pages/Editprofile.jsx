@@ -8,6 +8,7 @@ import { editprofile } from "../APIs/backend.api";
 import { removeAuth } from "../persist/authPersist";
 
 function Editprofile() {
+  
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const [updatedName, setName] = useState(user?.fullName || "");
   const [updatedEmail, setEmail] = useState(user?.email || "");
@@ -21,13 +22,13 @@ function Editprofile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  document.addEventListener('cookiechange', () => {
-    if(!document.cookie){
+  document.addEventListener("cookiechange", () => {
+    if (!document.cookie) {
       console.log("no cookie");
       removeAuth();
-      dispatch(setUser({user: null, isAuthenticated: false}));
+      dispatch(setUser({ user: null, isAuthenticated: false }));
     }
-  })
+  });
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -210,9 +211,7 @@ function Editprofile() {
       <Helmet>
         <title>Edit Profile | TODO</title>
       </Helmet>
-      <p className="font-extrabold text-7xl p-3">
-        signup ba login kor
-      </p>
+      <p className="font-extrabold text-7xl p-3">signup ba login kor</p>
     </div>
   );
 }

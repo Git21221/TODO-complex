@@ -5,21 +5,6 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
 
 const verifyJWT = asyncHandler(async (req, res, next) => {
-  const accoptions = {
-    maxAge: 24 * 60 * 60 * 1000, //1 day validity
-    httpOnly: false,
-    secure: true,
-    sameSite: "Lax",
-    path: "/",
-  };
-
-  const refoptions = {
-    maxAge: 6 * 30 * 24 * 60 * 60 * 1000, //6 months validity
-    httpOnly: false,
-    secure: true,
-    sameSite: "Lax",
-    path: "/",
-  };
 
   try {
     let token;
