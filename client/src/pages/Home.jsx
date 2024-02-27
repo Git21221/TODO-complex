@@ -8,7 +8,7 @@ function Home() {
   const { isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  setTimeout(() => {
+  document.addEventListener('cookiechange', () => {
     if (
       (Cookie.get("accesToken") == undefined &&
         Cookie.get("refreshToken") == undefined) ||
@@ -17,7 +17,7 @@ function Home() {
       removeAuth();
       dispatch(setUser({ user: null, isAuthenticated: false }));
     }
-  }, 2000); //update state after 2sex
+  }); //update state after 2sex
 
   if (!isAuthenticated)
     return (
