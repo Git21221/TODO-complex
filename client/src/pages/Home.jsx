@@ -2,22 +2,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { Helmet } from "react-helmet";
 import { removeAuth } from "../persist/authPersist";
 import { setUser } from "../features/login/authSlice";
-import Cookie from "js-cookie";
+import { useEffect } from "react";
+import { useCookies } from "react-cookie";
 
 function Home() {
   const { isAuthenticated } = useSelector((state) => state.auth);
+  const [cookies, setCokie, removeCookie] = useCookies([
+    "accessToken",
+    "refreshToken",
+  ]);
   const dispatch = useDispatch();
 
-  document.addEventListener('cookiechange', () => {
-    if (
-      (Cookie.get("accesToken") == undefined &&
-        Cookie.get("refreshToken") == undefined) ||
-      (Cookie.get("accessToken") == "" && Cookie.get("refreshToken") == "")
-    ) {
+  useEffect(() => {
+    if (!cookies.length || cookies.accessToken == "" || cookies.refreshToken == "") {
       removeAuth();
       dispatch(setUser({ user: null, isAuthenticated: false }));
     }
-  }); //update state after 2sex
+  }, []);
 
   if (!isAuthenticated)
     return (

@@ -8,13 +8,14 @@ import {
   Signin,
   Signup,
   Editprofile,
-  Profile
+  Profile,
 } from "./components/index.js";
 
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./store/store.js";
+import { CookiesProvider } from "react-cookie";
 
 const router = createBrowserRouter([
   {
@@ -46,15 +47,17 @@ const router = createBrowserRouter([
         element: <Profile />,
       },
       {
-        path: '/profile',
-        element: <Editprofile />
-      }
+        path: "/profile",
+        element: <Editprofile />,
+      },
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
+    <CookiesProvider defaultSetOptions={{ path: "/" }}>
       <RouterProvider router={router} />
+    </CookiesProvider>
   </Provider>
 );
