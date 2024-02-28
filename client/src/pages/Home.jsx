@@ -13,7 +13,7 @@ function Home() {
   ]);
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  document.addEventListener('cookiechange', () => {
     if (!cookies.length || cookies.accessToken == "" || cookies.refreshToken == "") {
       removeAuth();
       dispatch(setUser({ user: null, isAuthenticated: false }));
