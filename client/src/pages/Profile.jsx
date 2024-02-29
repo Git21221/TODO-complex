@@ -53,7 +53,7 @@ function Profile() {
       <div className="pt-20 flex gap-4 p-4">
         <div className="er bg-zinc-700 p-4 border-gray-300 w-52 flex flex-col gap-4 rounded-xl">
           <div className="profilePic flex h-20 w-20 rounded-xl bg-gray-800">
-            <img src={user.avatar} alt="profile picture" />
+            <img src={user?.avatar} alt="profile picture" />
           </div>
           <div className="profilename p-2">
             {user.fullName} {user.gender}

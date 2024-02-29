@@ -8,16 +8,14 @@ import jwt from "jsonwebtoken";
 
 const accessTokenOptions = {
   maxAge: 24 * 60 * 60 * 1000, // 1 day validity
-  httpOnly: false,
+  httpOnly: true,
   secure: true,
-  sameSite: "None",
   path: "/",
 };
 const refreshTokenOptions = {
   maxAge: 6 * 30 * 24 * 60 * 60 * 1000, //6 months validity
-  httpOnly: false,
+  httpOnly: true,
   secure: true,
-  sameSite: "None",
   path: "/",
 };
 

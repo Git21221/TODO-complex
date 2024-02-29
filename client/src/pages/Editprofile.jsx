@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../features/login/authSlice";
 import { editprofile } from "../APIs/backend.api";
-import { removeAuth } from "../persist/authPersist";
+import { removeAuth, setAuth } from "../persist/authPersist";
 
 function Editprofile() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -15,8 +15,8 @@ function Editprofile() {
   const [updatedDate, setDate] = useState(user?.dateofBirth || "");
   const [updatedMonth, setMonth] = useState(user?.monthofBirth || "");
   const [updatedYear, setYear] = useState(user?.yearofBirth || "");
-  const [updatedGender, setGender] = useState("Male");
-  const [imagetoShow, setimagetoShow] = useState("");
+  const [updatedGender, setGender] = useState(user?.gender || "Male");
+  const [imagetoShow, setimagetoShow] = useState(user?.avatar || "");
   const handleFileRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -57,6 +57,7 @@ function Editprofile() {
       const res = await editprofile(formdata, "POST");
       const userData = await res.json();
       dispatch(setUser({ user: userData.data, isAuthenticated: true }));
+      setAuth(userData.data);
       navigate(`/${user.username}`);
     } catch (error) {
       console.log(error);
@@ -88,7 +89,6 @@ function Editprofile() {
         </Helmet>
         <div className="form bg-zinc-700 p-10 rounded-xl bg-opacity-60 flex flex-col items-center justify-center gap-6">
           <h1 className="text-3xl font-bold">Update Profile</h1>
-          {/* <p className={}>{message}</p> */}
           <form
             method="post"
             className="flex flex-col gap-6"
@@ -122,7 +122,7 @@ function Editprofile() {
                 }}
               >
                 <div className="avatar flex h-24 w-24 bg-slate-600 rounded-lg">
-                  <img src={imagetoShow ? imagetoShow : user.avatar} alt="" />
+                  <img src={imagetoShow ? imagetoShow : user?.avatar} alt="" />
                   <Input
                     id="file"
                     type="file"
