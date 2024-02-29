@@ -105,6 +105,7 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   return res
+    .set("X-Content-Type-Options", "nosniff")
     .status(200)
     .json(new apiResponse(200, "User created successfully", user));
 });
@@ -134,8 +135,10 @@ const loginUser = asyncHandler(async (req, res) => {
   );
 
   try {
-    res.cookie("accessToken", accessToken, accessTokenOptions);
-    res.cookie("refreshToken", refreshToken, refreshTokenOptions);
+    res
+      .set("X-Content-Type-Options", "nosniff")
+      .cookie("accessToken", accessToken, accessTokenOptions)
+      .cookie("refreshToken", refreshToken, refreshTokenOptions);
   } catch (error) {
     console.log(error.message);
   }
@@ -175,7 +178,10 @@ const alltodos = asyncHandler(async (req, res) => {
     },
   ]);
 
-  return res.status(200).json(new apiResponse(200, "todos are here", todos));
+  return res
+    .set("X-Content-Type-Options", "nosniff")
+    .status(200)
+    .json(new apiResponse(200, "todos are here", todos));
 });
 
 const editProfile = asyncHandler(async (req, res) => {
