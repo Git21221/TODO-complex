@@ -19,6 +19,10 @@ app.use(express.urlencoded({ extended: true }));
 
 import userRouter from "./route/user.route.js";
 
+app.get('/', (req, res) => {
+  return res.json({"Hii": 'from saikat'});
+})
+
 //making user router
 app.use("/api/v1/users", userRouter);
 
