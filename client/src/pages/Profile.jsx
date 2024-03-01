@@ -7,45 +7,93 @@ import { useNavigate } from "react-router-dom";
 import { setUser } from "../features/login/authSlice";
 import { deleteprofile, logoutUser } from "../APIs/backend.api";
 import { removeAuth } from "../persist/authPersist";
+import { setLoading } from "../features/loadingSlice";
+import { setError, setSuccess } from "../features/messageSlice";
 
 function Profile() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  document.addEventListener('cookiechange', () => {
-    if(!document.cookie){
-      console.log("no cookie");
-      removeAuth();
-      dispatch(setUser({user: null, isAuthenticated: false}));
-    }
-  })
-
   const deleteProfile = async (e) => {
+    dispatch(setLoading({ isLoading: true }));
     e.preventDefault();
     try {
       const res = await deleteprofile("GET");
-      if (res.ok){
-        dispatch(setUser({user: null, isAuthenticated: false}));
+      if (res.ok) {
+        dispatch(setLoading({ isLoading: false }));
+        dispatch(setUser({ user: null, isAuthenticated: false }));
+        dispatch(
+          setSuccess({
+            isMessage: true,
+            message: "Account deleted successfully",
+            type: "success",
+          })
+        );
         removeAuth();
         navigate(`/signup`);
+      } else {
+        dispatch(
+          setError({
+            isMessage: true,
+            message: "Something went wrong!",
+            type: "error",
+          })
+        );
+        removeAuth();
+        dispatch(setUser({ user: null, isAuthenticated: false }));
       }
     } catch (error) {
-      console.log(error);
+      dispatch(setLoading({ isLoading: false }));
+      dispatch(
+        setError({
+          isMessage: true,
+          message: "Something went wrong!",
+          type: "error",
+        })
+      );
     }
   };
 
   const logout = async (e) => {
+    dispatch(setLoading({ isLoading: true }));
     e.preventDefault();
     try {
       const res = await logoutUser("GET");
       if (res.ok) {
         dispatch(setUser({ user: null, isAuthenticated: false }));
+        dispatch(setLoading({ isLoading: false }));
+        dispatch(
+          setSuccess({
+            isMessage: true,
+            message: "User logged out",
+            type: "success",
+          })
+        );
         removeAuth();
         navigate(`/login`);
+      } else {
+        removeAuth();
+        dispatch(
+          setError({
+            isMessage: true,
+            message: "Soemthing went wrong!",
+            type: "error",
+          })
+        );
+        dispatch(setUser({ user: null, isAuthenticated: false }));
       }
     } catch (error) {
-      console.log(error);
+      removeAuth();
+      dispatch(setUser({ user: null, isAuthenticated: false }));
+      dispatch(setLoading({ isLoading: false }));
+      dispatch(
+        setError({
+          isMessage: true,
+          message: "Soemthing went wrong!",
+          type: "error",
+        })
+      );
     }
   };
   if (isAuthenticated) {
@@ -93,9 +141,7 @@ function Profile() {
       <Helmet>
         <title>Home | TODO</title>
       </Helmet>
-      <p className="font-extrabold text-7xl p-3">
-        signup ba login kor
-      </p>
+      <p className="font-extrabold text-7xl p-3">signup ba login kor</p>
     </div>
   );
 }

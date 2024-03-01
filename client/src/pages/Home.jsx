@@ -4,21 +4,44 @@ import { removeAuth } from "../persist/authPersist";
 import { setUser } from "../features/login/authSlice";
 import { useEffect } from "react";
 import { useCookies } from "react-cookie";
+import { getcurrentuser } from "../APIs/backend.api";
+import { setLoading } from "../features/loadingSlice";
+import { setError, setSuccess } from "../features/messageSlice";
 
 function Home() {
-  const { isAuthenticated } = useSelector((state) => state.auth);
-  const [cookies, setCokie, removeCookie] = useCookies([
-    "accessToken",
-    "refreshToken",
-  ]);
   const dispatch = useDispatch();
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
-  document.addEventListener('cookiechange', () => {
-    if (!cookies.length || cookies.accessToken == "" || cookies.refreshToken == "") {
-      removeAuth();
-      dispatch(setUser({ user: null, isAuthenticated: false }));
-    }
-  }, []);
+  useEffect(() => {
+    dispatch(setLoading({ isLoading: true }));
+    const fetchUser = async () => {
+      const res = await getcurrentuser();
+      const userData = await res.json();
+      console.log(userData);
+      if (!res.ok) {
+        dispatch(setUser({ user: null, isAuthenticated: false }));
+        removeAuth();
+        dispatch(setLoading({ isLoading: false }));
+        dispatch(
+          setError({
+            isMessage: true,
+            message: userData.message,
+            type: "error",
+          })
+        );
+      } else {
+        dispatch(setLoading({ isLoading: false }));
+        dispatch(
+          setSuccess({
+            isMessage: true,
+            message: userData.message,
+            type: "success",
+          })
+        );
+      }
+    };
+    fetchUser();
+  }, [dispatch]);
 
   if (!isAuthenticated)
     return (
@@ -26,7 +49,7 @@ function Home() {
         <Helmet>
           <title>Home | TODO</title>
         </Helmet>
-        <p className="font-extrabold text-7xl p-3">signup ba login kor</p>
+        <p className="text-7xl p-3">signup ba login kor</p>
       </div>
     );
   return (
@@ -34,7 +57,7 @@ function Home() {
       <Helmet>
         <title>Home | TODO</title>
       </Helmet>
-      <p className="font-extrabold text-7xl"> Todo </p>
+      <p className="text-7xl"> Todo </p>
     </div>
   );
 }

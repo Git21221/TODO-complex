@@ -16,7 +16,7 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
       token = accessToken;
     }
 
-    if (!token) throw new apiError(401, "Invalid authorization request!");
+    if (!token) return res.status(400).json(new apiError(400, "Invalid authorization request!"));
 
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 

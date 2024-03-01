@@ -7,19 +7,10 @@ import "./handleCss.css";
 import { addtodo } from "../APIs/backend.api.js";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../features/login/authSlice.js";
+import { setError, setSuccess } from "../features/messageSlice.js";
 
 function Addtodo() {
-
   const dispatch = useDispatch();
-
-  document.addEventListener('cookiechange', () => {
-    if(!document.cookie){
-      console.log("no cookie");
-      removeAuth();
-      dispatch(setUser({user: null, isAuthenticated: false}));
-    }
-  })
-  
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const [todoName, setTodo] = useState("");
   const [todoDesc, setTodoDesc] = useState("");
@@ -30,16 +21,43 @@ function Addtodo() {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    if ([todoName, todoDesc].some((field) => field === ""))
-      console.log("all fields are required");
+    if ([todoName, todoDesc].some((field) => field?.trim() === ""))
+      dispatch(
+        setError({
+          isMessage: true,
+          message: "All fields are required!",
+          type: "error",
+        })
+      );
 
     try {
       const res = await addtodo(data, "POST");
-      if (res.ok){
+      if (res.ok) {
+        dispatch(
+          setSuccess({
+            isMessage: true,
+            message: "Todo added successfully",
+            type: "success",
+          })
+        );
         navigate("/allTodos");
+      } else {
+        dispatch(
+          setError({
+            isMessage: true,
+            message: "Something went wrong!",
+            type: "error",
+          })
+        );
       }
     } catch (error) {
-      console.log(error);
+      dispatch(
+        setError({
+          isMessage: true,
+          message: "Something went wrong!",
+          type: "error",
+        })
+      );
     }
   };
 
@@ -89,9 +107,7 @@ function Addtodo() {
       <Helmet>
         <title>Home | TODO</title>
       </Helmet>
-      <p className="font-extrabold text-7xl p-3">
-        signup ba login kor
-      </p>
+      <p className="font-extrabold text-7xl p-3">signup ba login kor</p>
     </div>
   );
 }

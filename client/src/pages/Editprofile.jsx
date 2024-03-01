@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { setUser } from "../features/login/authSlice";
 import { editprofile } from "../APIs/backend.api";
 import { removeAuth, setAuth } from "../persist/authPersist";
+import { setLoading } from "../features/loadingSlice";
+import { setError, setSuccess } from "../features/messageSlice";
 
 function Editprofile() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -20,14 +22,6 @@ function Editprofile() {
   const handleFileRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  document.addEventListener("cookiechange", () => {
-    if (!document.cookie) {
-      console.log("no cookie");
-      removeAuth();
-      dispatch(setUser({ user: null, isAuthenticated: false }));
-    }
-  });
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -52,15 +46,46 @@ function Editprofile() {
   formdata.append("updatedGender", updatedGender);
 
   const submitHandler = async (e) => {
+    dispatch(setLoading({ isLoading: true }));
     e.preventDefault();
     try {
       const res = await editprofile(formdata, "POST");
       const userData = await res.json();
-      dispatch(setUser({ user: userData.data, isAuthenticated: true }));
-      setAuth(userData.data);
-      navigate(`/${user.username}`);
+      if (res.ok) {
+        dispatch(setUser({ user: userData.data, isAuthenticated: true }));
+        setAuth(userData.data);
+        dispatch(setLoading({ isLoading: false }));
+        dispatch(
+          setSuccess({
+            isMessage: true,
+            message: "Profile edited successfully",
+            type: "success",
+          })
+        );
+        navigate(`/${user.username}`);
+      } else {
+        dispatch(setUser({ user: null, isAuthenticated: false }));
+        removeAuth();
+        dispatch(setLoading({ isLoading: false }));
+        dispatch(
+          setError({
+            isMessage: true,
+            message: "Something went wrong",
+            type: "error",
+          })
+        );
+        navigate("/login");
+      }
     } catch (error) {
-      console.log(error);
+      dispatch(
+        setError({
+          isMessage: true,
+          message: "Something went wrong",
+          type: "error",
+        })
+      );
+      removeAuth();
+      dispatch(setUser({ user: null, isAuthenticated: false }));
     }
   };
 
@@ -210,7 +235,7 @@ function Editprofile() {
       <Helmet>
         <title>Edit Profile | TODO</title>
       </Helmet>
-      <p className="font-extrabold text-7xl p-3">signup ba login kor</p>
+      <p className="text-7xl p-3">signup ba login kor</p>
     </div>
   );
 }

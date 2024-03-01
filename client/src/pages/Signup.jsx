@@ -1,11 +1,8 @@
 import React, { useState } from "react";
 import { Input } from "../components/index.js";
-import validator from "validator";
 import { useNavigate } from "react-router-dom";
 import { register } from "../APIs/backend.api.js";
 import { useDispatch } from "react-redux";
-import { setUser } from "../features/login/authSlice.js";
-import { removeAuth } from "../persist/authPersist.js";
 import { setError, setSuccess } from "../features/messageSlice.js";
 import { setLoading } from "../features/loadingSlice.js";
 
@@ -14,28 +11,20 @@ function Signup() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isValidEmail, setisValidEmail] = useState(true);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  document.addEventListener("cookiechange", () => {
-    if (!document.cookie) {
-      console.log("no cookie");
-      removeAuth();
-      dispatch(setUser({ user: null, isAuthenticated: false }));
-    }
-  });
 
   const data = { fullName, email, username, password };
 
   const submitHandler = async (e) => {
+    dispatch(setLoading({ isLoading: true }));
     e.preventDefault();
     try {
       const res = await register(data, "POST");
       const userData = await res.json();
-      console.log(userData);
+
       if (res.ok) {
-        dispatch(setLoading({ isLoading: true }));
+        dispatch(setLoading({ isLoading: false }));
         dispatch(
           setSuccess({
             isMessage: true,
@@ -55,7 +44,13 @@ function Signup() {
         );
       }
     } catch (error) {
-      console.log(error.message);
+      dispatch(
+        setError({
+          isMessage: true,
+          message: "Something went wrong!",
+          type: "error",
+        })
+      );
     }
   };
 

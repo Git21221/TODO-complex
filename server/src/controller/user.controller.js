@@ -7,20 +7,18 @@ import { uploadOnCloudianry } from "../utils/cloudinary.js";
 import jwt from "jsonwebtoken";
 
 const accessTokenOptions = {
-  maxAge: 24 * 60 * 60 * 1000, // 1 day validity
-  httpOnly: true,
+  maxAge: 20 * 1000, // 1 day validity
+  httpOnly: false,
   secure: true,
-  domain: 'localhost',
-  sameSite: 'None',
-  path: '/'
+  sameSite: "None",
+  path: "/",
 };
 const refreshTokenOptions = {
   maxAge: 6 * 30 * 24 * 60 * 60 * 1000, //6 months validity
-  httpOnly: true,
+  httpOnly: false,
   secure: true,
-  sameSite: 'None',
-  path: '/',
-  domain: 'localhost'
+  sameSite: "None",
+  path: "/",
 };
 
 const homepage = (req, res) => {
@@ -152,7 +150,9 @@ const loginUser = asyncHandler(async (req, res) => {
 
 const getCurrentUser = asyncHandler(async (req, res) => {
   const user = req?.user;
-  return res.status(200).json(new apiResponse(200, "User found", user));
+  if (!user) return res.status(400).json(new apiError(400, "Please login!"));
+
+  return res.status(200).json(new apiResponse(200, `Welcome back ${req.user.fullName}`, user));
 });
 
 const addTodo = asyncHandler(async (req, res) => {
@@ -268,12 +268,14 @@ const logout = asyncHandler(async (req, res) => {
 const editTodo = asyncHandler(async (req, res) => {
   const { todoid, todoName, todoDesc } = req.body;
 
-  await Todo.findById(todoid).updateOne({
+  const todo = await Todo.findById(todoid)?.updateOne({
     todoName,
     todoDesc,
   });
 
-  return res.status(200).json(new apiResponse(200, "todo updated"));
+  if(!todo) return res.status(400).json(new apiError(400, "Couldn't find todo!"));
+
+  return res.status(200).json(new apiResponse(200, "Todo updated successfully"));
 });
 
 export {

@@ -1,24 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./navbar.css";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import { removeAuth } from "../../persist/authPersist";
-import { setUser } from "../../features/login/authSlice";
 
 
 function Navbar() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
-
-  document.addEventListener('cookiechange', () => {
-    if(!document.cookie){
-      console.log("no cookie");
-      removeAuth();
-      dispatch(setUser({user: null, isAuthenticated: false}));
-    }
-  })
   
   if (!isAuthenticated) {
     return (

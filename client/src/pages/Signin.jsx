@@ -16,14 +16,6 @@ function Signin() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  document.addEventListener("cookiechange", () => {
-    if (!document.cookie) {
-      console.log("no cookie");
-      removeAuth();
-      dispatch(setUser({ user: null, isAuthenticated: false }));
-    }
-  });
-
   const email = username;
 
   const data = { email, username, password };
@@ -36,20 +28,37 @@ function Signin() {
       const res = await login(data, "POST");
 
       const userData = await res.json();
-      console.log(userData);
+
       if (res.ok) {
         dispatch(setLoading({ isLoading: false }));
-        dispatch(setSuccess({ isMessage: true, message: userData.message, type: "success" }));
+        dispatch(
+          setSuccess({
+            isMessage: true,
+            message: userData.message,
+            type: "success",
+          })
+        );
         dispatch(setUser({ user: userData.data, isAuthenticated: true }));
         setAuth(userData.data);
         navigate("/");
-      }
-      else{
-        dispatch(setLoading({isLoading: false}));
-        dispatch(setError({ isMessage: true, message: userData.message, type: "error" }));
+      } else {
+        dispatch(setLoading({ isLoading: false }));
+        dispatch(
+          setError({
+            isMessage: true,
+            message: userData.message,
+            type: "error",
+          })
+        );
       }
     } catch (error) {
-      // return null;
+      dispatch(
+        setError({
+          isMessage: true,
+          message: "Something went wrong!",
+          type: "error",
+        })
+      );
     }
   };
 
