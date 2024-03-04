@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { Input, Loader } from "../components/index.js";
-import validator from "validator";
+import { Input } from "../components/index.js";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setUser } from "../features/login/authSlice.js";
 import { login } from "../APIs/backend.api.js";
-import { removeAuth, setAuth } from "../persist/authPersist.js";
+import { setAuth } from "../persist/authPersist.js";
 import { setLoading } from "../features/loadingSlice.js";
 import { setError, setSuccess } from "../features/messageSlice.js";
 
