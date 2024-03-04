@@ -3,6 +3,7 @@ import {
   addTodo,
   alltodos,
   deleteProfile,
+  deleteTodo,
   editProfile,
   editTodo,
   getCurrentUser,
@@ -28,5 +29,6 @@ router
 router.route("/deleteProfile").get(verifyJWT, deleteProfile);
 router.route("/logout").get(verifyJWT, logout);
 router.route("/editTodo").post(verifyJWT, editTodo);
+router.route("/deleteTodo").post(verifyJWT, deleteTodo);
 
 export default router;

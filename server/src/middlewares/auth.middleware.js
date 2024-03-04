@@ -26,13 +26,13 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
 
     const user = await User.findById(userid).select("-password -refreshToken");
 
-    if (!user) throw new apiError(401, "Invalid access token");
+    if (!user) return res.status(400).json(new apiError(401, "Invalid access token"));
 
     req.user = user;
 
     next();
   } catch (error) {
-    throw new apiError(400, error.message || "problem in verify");
+    return res.status(400).json(new apiError(400, "Problem in verify"));
   }
 });
 

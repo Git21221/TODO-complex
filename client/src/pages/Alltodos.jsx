@@ -10,15 +10,20 @@ import { removeAuth } from "../persist/authPersist.js";
 import { setUser } from "../features/login/authSlice.js";
 import { setError, setSuccess } from "../features/messageSlice.js";
 import { setLoading } from "../features/loadingSlice.js";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import HorizontalRuleRoundedIcon from "@mui/icons-material/HorizontalRuleRounded";
+import OpenInFullRoundedIcon from '@mui/icons-material/OpenInFullRounded';
 
 function Alltodos() {
   const [editedTodoName, setEditedTodoName] = useState("");
   const [editedTodoDesc, setEditedTodoDesc] = useState("");
   const [editingTodoId, setEditingTodoId] = useState("");
+  const [hoverTodoId, setHoverTodoId] = useState("");
   const dispatch = useDispatch();
   const { todo } = useSelector((state) => state.todo);
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [todos, setTodos] = useState([]);
+  const [hover, setHover] = useState(false);
 
   useEffect(() => {
     dispatch(setLoading({ isLoading: true }));
@@ -32,7 +37,7 @@ function Alltodos() {
         setTodo(incomingTodos.data);
       } else {
         removeAuth();
-        dispatch(setUser({user: null, isAuthenticated: false}));
+        dispatch(setUser({ user: null, isAuthenticated: false }));
         dispatch(setLoading({ isLoading: false }));
       }
     };
@@ -96,6 +101,11 @@ function Alltodos() {
     }
   };
 
+  const handleHover = (todoid) => {
+    setHoverTodoId(todoid);
+    setHover(true);
+  };
+
   const handleEditedTodoCancel = () => {
     setEditingTodoId(null);
   };
@@ -111,9 +121,28 @@ function Alltodos() {
         </Helmet>
         {todo.map((todo) => (
           <div
+            onMouseEnter={() => {
+              handleHover(todo._id);
+            }}
+            onMouseLeave={() => setHover(false)}
             key={todo._id}
             className="todos p-4 rounded-lg w-72 h-auto bg-zinc-700 bg-opacity-60"
           >
+            {hover && hoverTodoId === todo._id && (
+              <div className="controls flex gap-2 relative top-[-24px]">
+                <div className="h-4 bg-red-500 w-4 rounded-3xl flex items-center justify-center text-black">
+                  <CloseRoundedIcon style={{ fontSize: "17px", padding: 0 }} />
+                </div>
+                <div className="h-4 bg-yellow-500 w-4 rounded-3xl flex items-center justify-center text-black">
+                  <HorizontalRuleRoundedIcon
+                    style={{ fontSize: "17px", padding: 0 }}
+                  />
+                </div>
+                <div className="h-4 bg-green-500 w-4 rounded-3xl flex items-center justify-center text-black">
+                  <OpenInFullRoundedIcon style={{ fontSize: "14px", padding: 0 }} />
+                </div>
+              </div>
+            )}
             <div className="flex items-center justify-between">
               {editingTodoId === todo._id ? (
                 <input

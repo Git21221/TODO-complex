@@ -11,7 +11,7 @@ import { setError, setSuccess } from "../features/messageSlice.js";
 
 function Addtodo() {
   const dispatch = useDispatch();
-  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const [todoName, setTodo] = useState("");
   const [todoDesc, setTodoDesc] = useState("");
   const navigate = useNavigate();
@@ -69,7 +69,7 @@ function Addtodo() {
         </Helmet>
         <div className="form bg-zinc-700 p-10 rounded-xl bg-opacity-60 flex flex-col items-center justify-center gap-6">
           <h1 className="text-3xl font-bold">Add your Todo</h1>
-          {/* <p className={}>{message}</p> */}
+
           <form
             method="post"
             className="flex flex-col gap-6"

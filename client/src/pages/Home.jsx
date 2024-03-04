@@ -29,6 +29,15 @@ function Home() {
             type: "error",
           })
         );
+        setTimeout(() => {
+          dispatch(
+            setError({
+              isMessage: false,
+              message: userData.message,
+              type: "error",
+            })
+          );
+        }, 2000);
       } else {
         dispatch(setLoading({ isLoading: false }));
         dispatch(
@@ -38,6 +47,14 @@ function Home() {
             type: "success",
           })
         );
+        setTimeout(() => {
+          console.log("message removed");
+          dispatch(
+            setSuccess({
+              isMessage: false,
+            })
+          );
+        }, 2000);
       }
     };
     fetchUser();

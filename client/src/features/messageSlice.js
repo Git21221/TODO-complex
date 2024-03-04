@@ -4,10 +4,10 @@ const initialState = {
   isMessage: false,
   message: null,
   type: null,
-}
+};
 
 const messageSlice = createSlice({
-  name: 'message',
+  name: "message",
   initialState,
   reducers: {
     setSuccess: (state, action) => {
@@ -19,10 +19,14 @@ const messageSlice = createSlice({
       state.isMessage = action.payload.isMessage;
       state.message = action.payload.message;
       state.type = action.payload.type;
-    }
-  }
+    },
+    resetMessage: (state, action) => {
+      state.isMessage = false;
+      state.message = null;
+      state.type = null;
+    },
+  },
 });
 
-
-export const {setSuccess, setError} = messageSlice.actions;
-export default messageSlice.reducer
+export const { setSuccess, setError, resetMessage } = messageSlice.actions;
+export default messageSlice.reducer;

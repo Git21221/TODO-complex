@@ -11,6 +11,7 @@ const Input = forwardRef(({ type, placeholder, onChange, value }, ref) => {
         placeholder={placeholder}
         className="input py-2 px-4 text-white bg-zinc-700 backdrop-blur-2xl rounded-3xl"
         onChange={onChange}
+        autoComplete="true"
       />
     </div>
   );

@@ -114,7 +114,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const { username, email, password } = req.body;
 
   if ([username, email, password].some((field) => field.trim() === ""))
-    throw new apiError(401, "All fields are required!");
+    return res.staus(400).json(new apiError(401, "All fields are required!"));
 
   const user = await User.findOne({
     $or: [{ username }, { email }],
@@ -124,7 +124,8 @@ const loginUser = asyncHandler(async (req, res) => {
     return res.status(401).json(new apiError(401, "Wrong username or email"));
 
   const checkPass = await user.isPasswordCorrect(password);
-  if (!checkPass) throw new apiError(400, "password do not match");
+  if (!checkPass)
+    res.status(400).json(new apiError(400, "Wrong password"));
 
   const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
     user._id
@@ -134,17 +135,10 @@ const loginUser = asyncHandler(async (req, res) => {
     "-password -refreshToken"
   );
 
-  try {
-    res
-      .set("X-Content-Type-Options", "nosniff")
-      .cookie("accessToken", accessToken, accessTokenOptions)
-      .cookie("refreshToken", refreshToken, refreshTokenOptions);
-  } catch (error) {
-    console.log(error.message);
-  }
-
   return res
     .status(200)
+    .cookie("accessToken", accessToken, accessTokenOptions)
+    .cookie("refreshToken", refreshToken, refreshTokenOptions)
     .json(new apiResponse(200, "Login successful", loggedinUser));
 });
 
@@ -152,7 +146,9 @@ const getCurrentUser = asyncHandler(async (req, res) => {
   const user = req?.user;
   if (!user) return res.status(400).json(new apiError(400, "Please login!"));
 
-  return res.status(200).json(new apiResponse(200, `Welcome back ${req.user.fullName}`, user));
+  return res
+    .status(200)
+    .json(new apiResponse(200, `Welcome back ${req.user.fullName}`, user));
 });
 
 const addTodo = asyncHandler(async (req, res) => {
@@ -160,7 +156,7 @@ const addTodo = asyncHandler(async (req, res) => {
   const ownerid = req.user._id;
 
   if ([todoName, todoDesc].some((field) => field === ""))
-    throw new apiError(401, "All fields are required");
+    return res.status(400).json(new apiError(401, "All fields are required"));
 
   const createdtodo = await Todo.create({ todoName, todoDesc, owner: ownerid });
 
@@ -229,7 +225,7 @@ const editProfile = asyncHandler(async (req, res) => {
   );
 
   if (!updatedInfo)
-    throw new apiError(401, "Something went wrong while updating information");
+    return res.status(401).json(new apiError(401, "Something went wrong!"));
 
   return res
     .status(200)
@@ -268,14 +264,30 @@ const logout = asyncHandler(async (req, res) => {
 const editTodo = asyncHandler(async (req, res) => {
   const { todoid, todoName, todoDesc } = req.body;
 
+  if(todoName == "" && todoDesc == ""){
+    await Todo.findByIdAndDelete(todoid);
+    return res.status(200).json(new apiResponse(200, "Empty todo deleted"));
+  }
+
   const todo = await Todo.findById(todoid)?.updateOne({
     todoName,
     todoDesc,
   });
 
-  if(!todo) return res.status(400).json(new apiError(400, "Couldn't find todo!"));
+  if (!todo)
+    return res.status(400).json(new apiError(400, "Couldn't find todo!"));
 
-  return res.status(200).json(new apiResponse(200, "Todo updated successfully"));
+  return res
+    .status(200)
+    .json(new apiResponse(200, "Todo updated successfully"));
+});
+
+const deleteTodo = asyncHandler(async (req, res) => {
+  const { todoid } = req.body;
+  await Todo.findByIdAndDelete(todoid);
+  return res
+    .status(200)
+    .json(new apiResponse(200, "Todo deleted successfully"));
 });
 
 export {
@@ -290,4 +302,5 @@ export {
   editTodo,
   refreshAccessToken,
   homepage,
+  deleteTodo,
 };

@@ -81,21 +81,23 @@ function Profile() {
             type: "error",
           })
         );
+        removeMessage();
         dispatch(setUser({ user: null, isAuthenticated: false }));
       }
     } catch (error) {
-      removeAuth();
       dispatch(setUser({ user: null, isAuthenticated: false }));
       dispatch(setLoading({ isLoading: false }));
       dispatch(
         setError({
           isMessage: true,
-          message: "Soemthing went wrong!",
+          message: "Something went wrong!",
           type: "error",
         })
       );
+      removeAuth();
     }
   };
+
   if (isAuthenticated) {
     return (
       <div className="pt-20 flex gap-4 p-4">

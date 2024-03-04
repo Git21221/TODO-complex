@@ -106,6 +106,7 @@ function Editprofile() {
     "November",
     "December",
   ];
+  
   if (isAuthenticated) {
     return (
       <div className="pt-16 h-screen w-screen flex items-center justify-center bg-zinc-950 flex-col gap-8 text-white">
