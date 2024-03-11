@@ -147,8 +147,8 @@ function Editprofile() {
                   handleFileRef.current.click();
                 }}
               >
-                <div className="avatar flex h-24 w-24 bg-slate-600 rounded-lg">
-                  <img src={imagetoShow ? imagetoShow : user?.avatar} alt="" />
+                <div className="avatar flex h-24 w-24">
+                  <img className="object-cover rounded-xl" src={imagetoShow ? imagetoShow : user?.avatar} alt="image" />
                   <Input
                     id="file"
                     type="file"
