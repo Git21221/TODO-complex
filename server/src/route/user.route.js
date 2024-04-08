@@ -6,6 +6,7 @@ import {
   deleteTodo,
   editProfile,
   editTodo,
+  getAllJobs,
   getCurrentUser,
   homepage,
   loginUser,
@@ -30,5 +31,6 @@ router.route("/deleteProfile").get(verifyJWT, deleteProfile);
 router.route("/logout").get(verifyJWT, logout);
 router.route("/editTodo").post(verifyJWT, editTodo);
 router.route("/deleteTodo").post(verifyJWT, deleteTodo);
+router.route("/getAllJobs").get(getAllJobs);
 
 export default router;

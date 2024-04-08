@@ -290,6 +290,149 @@ const deleteTodo = asyncHandler(async (req, res) => {
     .json(new apiResponse(200, "Todo deleted successfully"));
 });
 
+const getAllJobs = asyncHandler(async (req, res) => {
+  const data = {
+    "job_updates": [
+      {
+        "job_title": "Software Engineer",
+        "company": "Tech Innovations Inc.",
+        "location": "San Francisco, CA",
+        "posted_date": "2024-04-08",
+        "description": "We are seeking a talented software engineer to join our team. The ideal candidate will have experience in building scalable web applications using modern technologies such as React and Node.js. Please see our website for more details and to apply.",
+        "requirements": [
+          "Bachelor's degree in Computer Science or related field",
+          "2+ years of experience in software development",
+          "Proficiency in JavaScript, HTML, and CSS",
+          "Experience with RESTful APIs"
+        ],
+        "salary": "$90,000 - $120,000 per year",
+        "apply_link": "https://example.com/careers/software-engineer"
+      },
+      {
+        "job_title": "Marketing Manager",
+        "company": "Global Marketing Solutions",
+        "location": "New York, NY",
+        "posted_date": "2024-04-07",
+        "description": "We are looking for a creative and strategic Marketing Manager to lead our marketing efforts. The ideal candidate will have experience in digital marketing, content creation, and campaign management. If you're passionate about marketing and ready to take on a leadership role, apply now!",
+        "requirements": [
+          "Bachelor's degree in Marketing or related field",
+          "5+ years of experience in marketing",
+          "Strong understanding of digital marketing channels",
+          "Excellent communication and leadership skills"
+        ],
+        "salary": "$80,000 - $100,000 per year",
+        "apply_link": "https://example.com/careers/marketing-manager"
+      },
+      {
+        "job_title": "Data Scientist",
+        "company": "Analytics Pro",
+        "location": "Chicago, IL",
+        "posted_date": "2024-04-06",
+        "description": "We are seeking a skilled Data Scientist to join our analytics team. The ideal candidate will have experience in machine learning, statistical analysis, and data visualization. If you're passionate about leveraging data to drive insights and decision-making, apply now!",
+        "requirements": [
+          "Master's degree or PhD in Statistics, Mathematics, Computer Science, or related field",
+          "3+ years of experience in data science or analytics",
+          "Proficiency in Python, R, or similar programming languages",
+          "Experience with machine learning libraries such as TensorFlow or scikit-learn"
+        ],
+        "salary": "$100,000 - $130,000 per year",
+        "apply_link": "https://example.com/careers/data-scientist"
+      },
+      {
+        "job_title": "Graphic Designer",
+        "company": "Creative Designs Agency",
+        "location": "Los Angeles, CA",
+        "posted_date": "2024-04-05",
+        "description": "We are seeking a talented Graphic Designer to join our creative team. The ideal candidate will have a strong portfolio demonstrating proficiency in Adobe Creative Suite and a keen eye for design aesthetics. Apply now to be a part of our exciting projects!",
+        "requirements": [
+          "Bachelor's degree in Graphic Design or related field",
+          "2+ years of experience in graphic design",
+          "Proficiency in Adobe Creative Suite (Photoshop, Illustrator, InDesign)",
+          "Strong conceptual and visual communication skills"
+        ],
+        "salary": "$50,000 - $70,000 per year",
+        "apply_link": "https://example.com/careers/graphic-designer"
+      },
+      {
+        "job_title": "Financial Analyst",
+        "company": "Investment Partners LLC",
+        "location": "Boston, MA",
+        "posted_date": "2024-04-04",
+        "description": "We are looking for a detail-oriented Financial Analyst to join our finance team. The ideal candidate will have experience in financial modeling, forecasting, and reporting. If you have strong analytical skills and a passion for finance, apply now!",
+        "requirements": [
+          "Bachelor's degree in Finance, Accounting, Economics, or related field",
+          "2+ years of experience in financial analysis or accounting",
+          "Proficiency in Microsoft Excel and financial modeling techniques",
+          "Excellent analytical and problem-solving skills"
+        ],
+        "salary": "$60,000 - $80,000 per year",
+        "apply_link": "https://example.com/careers/financial-analyst"
+      },
+      {
+        "job_title": "UX/UI Designer",
+        "company": "Digital Innovations Ltd.",
+        "location": "Seattle, WA",
+        "posted_date": "2024-04-03",
+        "description": "We are seeking a talented UX/UI Designer to join our design team. The ideal candidate will have experience in user research, wireframing, and prototyping. If you have a passion for creating intuitive and engaging user experiences, apply now!",
+        "requirements": [
+          "Bachelor's degree in Design, Human-Computer Interaction, or related field",
+          "2+ years of experience in UX/UI design",
+          "Proficiency in design tools such as Sketch, Figma, or Adobe XD",
+          "Strong understanding of user-centered design principles"
+        ],
+        "salary": "$70,000 - $90,000 per year",
+        "apply_link": "https://example.com/careers/ux-ui-designer"
+      },
+      {
+        "job_title": "Sales Manager",
+        "company": "SalesForce Solutions Inc.",
+        "location": "Atlanta, GA",
+        "posted_date": "2024-04-02",
+        "description": "We are looking for an experienced Sales Manager to lead our sales team. The ideal candidate will have a proven track record in sales leadership, client relationship management, and achieving revenue targets. Apply now to drive our sales strategy!",
+        "requirements": [
+          "Bachelor's degree in Business Administration, Marketing, or related field",
+          "5+ years of experience in sales management",
+          "Demonstrated success in exceeding sales targets",
+          "Excellent communication and negotiation skills"
+        ],
+        "salary": "$90,000 - $120,000 per year",
+        "apply_link": "https://example.com/careers/sales-manager"
+      },
+      {
+        "job_title": "Human Resources Specialist",
+        "company": "PeopleFirst HR Solutions",
+        "location": "Houston, TX",
+        "posted_date": "2024-04-01",
+        "description": "We are seeking a dedicated Human Resources Specialist to support our HR department. The ideal candidate will have experience in recruitment, employee relations, and HR policies. If you're passionate about fostering a positive work environment, apply now!",
+        "requirements": [
+          "Bachelor's degree in Human Resources Management, Business Administration, or related field",
+          "2+ years of experience in human resources",
+          "Knowledge of employment laws and regulations",
+          "Strong interpersonal and communication skills"
+        ],
+        "salary": "$50,000 - $65,000 per year",
+        "apply_link": "https://example.com/careers/hr-specialist"
+      },
+      {
+        "job_title": "Product Manager",
+        "company": "InnovateTech Solutions",
+        "location": "Austin, TX",
+        "posted_date": "2024-03-31",
+        "description": "We are looking for a strategic and results-driven Product Manager to lead our product development efforts. The ideal candidate will have experience in product lifecycle management, market research, and cross-functional collaboration. Apply now to drive innovation!",
+        "requirements": [
+          "Bachelor's degree in Business, Engineering, or related field",
+          "3+ years of experience in product management or related roles",
+          "Strong project management skills",
+          "Ability to prioritize and manage multiple tasks"
+        ],
+        "salary": "$80,000 - $110,000 per year",
+        "apply_link": "https://example.com/careers/product-manager"
+      }
+    ]
+  }
+  return res.status(200).json(new apiResponse(200, "Jobs are here", data));  
+});
+
 export {
   registerUser,
   loginUser,
@@ -303,4 +446,5 @@ export {
   refreshAccessToken,
   homepage,
   deleteTodo,
+  getAllJobs,
 };
