@@ -8,8 +8,23 @@ import { editprofile } from "../APIs/backend.api";
 import { removeAuth, setAuth } from "../persist/authPersist";
 import { setLoading } from "../features/loadingSlice";
 import { setError, setSuccess } from "../features/messageSlice";
+import { useForm } from "react-hook-form";
+import { styled } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 function Editprofile() {
+  const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+  });
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const [updatedName, setName] = useState(user?.fullName || "");
   const [updatedEmail, setEmail] = useState(user?.email || "");
@@ -22,6 +37,15 @@ function Editprofile() {
   const handleFileRef = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    trigger,
+    control,
+  } = useForm();
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -106,7 +130,7 @@ function Editprofile() {
     "November",
     "December",
   ];
-  
+
   if (isAuthenticated) {
     return (
       <div className="pt-16 h-screen w-screen flex items-center justify-center bg-zinc-950 flex-col gap-8 text-white">
@@ -125,38 +149,42 @@ function Editprofile() {
             <div className="nameemailandpic flex gap-3">
               <div className="nameEmail flex flex-col gap-3">
                 <Input
+                  title="Updated name"
+                  name="updatedName"
                   type="text"
-                  value={updatedName}
-                  placeholder="Full Name"
-                  onChange={(e) => {
-                    setName(e.target.value);
+                  register={register}
+                  errors={errors}
+                  validation={{
+                    required: true,
                   }}
+                  watch={watch}
+                  control={control}
+                  trigger={trigger}
                 />
                 <Input
+                  title="Upadate Email"
+                  name="updatedEmail"
                   type="text"
-                  value={updatedEmail}
-                  placeholder="Email"
-                  onChange={(e) => {
-                    setEmail(e.target.value);
+                  register={register}
+                  errors={errors}
+                  validation={{
+                    required: true,
                   }}
+                  watch={watch}
+                  control={control}
+                  trigger={trigger}
                 />
               </div>
-              <label
-                htmlFor="file"
-                onClick={() => {
-                  handleFileRef.current.click();
-                }}
+              <Button
+                component="label"
+                role={undefined}
+                variant="contained"
+                tabIndex={-1}
+                startIcon={<CloudUploadIcon />}
               >
-                <div className="avatar flex h-24 w-24">
-                  <img className="object-cover rounded-xl" src={imagetoShow ? imagetoShow : user?.avatar} alt="image" />
-                  <Input
-                    id="file"
-                    type="file"
-                    ref={handleFileRef}
-                    onChange={handleImageChange}
-                  />
-                </div>
-              </label>
+                Upload file
+                <VisuallyHiddenInput type="file" onChange={handleImageChange} />
+              </Button>
             </div>
             <div className="flex flex-col gap-3">
               <span>Choose your gender</span>

@@ -6,12 +6,14 @@ import {
   deleteTodo,
   editProfile,
   editTodo,
-  getAllJobs,
+  forgetPassword,
   getCurrentUser,
   homepage,
   loginUser,
   logout,
   registerUser,
+  // sendEmail,
+  // validateEmail,
 } from "../controller/user.controller.js";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
@@ -31,6 +33,8 @@ router.route("/deleteProfile").get(verifyJWT, deleteProfile);
 router.route("/logout").get(verifyJWT, logout);
 router.route("/editTodo").post(verifyJWT, editTodo);
 router.route("/deleteTodo").post(verifyJWT, deleteTodo);
-router.route("/getAllJobs").get(getAllJobs);
+// router.route("/validateEmail").post(validateEmail);
+// router.route("/sendEmail").get(sendEmail);
+router.route("/forgetPassword").post(forgetPassword);
 
 export default router;

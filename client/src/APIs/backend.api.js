@@ -1,4 +1,4 @@
-const register = async (data, method) => {
+const registerData = async (data, method) => {
   const requestOptions = {
     method,
     body: JSON.stringify(data),
@@ -215,8 +215,53 @@ const getcurrentuser = async (method) => {
   return res;
 };
 
+const sendEmail = async (method) => {
+  const requestOptions = {
+    method,
+    credentials: "include",
+  };
+
+  const localServer = `${
+    import.meta.env.VITE_LOCALHOST_SERVER_LINK
+  }/users/sendEmail`;
+  const hostedServer = `${
+    import.meta.env.VITE_HOSTED_SERVER_LINK
+  }/users/sendEmail`;
+
+  let res;
+  import.meta.env.VITE_DEVELOPMENT_ENV === "true"
+    ? (res = await fetch(localServer, requestOptions))
+    : (res = await fetch(hostedServer, requestOptions));
+
+  return res;
+}
+
+const forgetPassword = async (data, method) => {
+  const requestOptions = {
+    method,
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  const localServer = `${
+    import.meta.env.VITE_LOCALHOST_SERVER_LINK
+  }/users/forgetPassword`;
+  const hostedServer = `${
+    import.meta.env.VITE_HOSTED_SERVER_LINK
+  }/users/forgetPassword`;
+
+  let res;
+  import.meta.env.VITE_DEVELOPMENT_ENV === "true"
+    ? (res = await fetch(localServer, requestOptions))
+    : (res = await fetch(hostedServer, requestOptions));
+
+  return res;
+}
+
 export {
-  register,
+  registerData,
   login,
   deleteprofile,
   logoutUser,
@@ -225,5 +270,7 @@ export {
   refreshuser,
   edittodo,
   addtodo,
-  getcurrentuser
+  getcurrentuser,
+  sendEmail,
+  forgetPassword,
 };

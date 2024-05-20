@@ -50,6 +50,13 @@ const userSchema = new Schema(
         ref: "todos",
       },
     ],
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    emailVerificationToken: {
+      type: String,
+    }
   },
   { timestamps: true }
 );
@@ -84,6 +91,16 @@ userSchema.methods.generateRefreshToken = function () {
     },
     process.env.REFRESH_TOKEN_SECRET,
     { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
+  );
+};
+
+userSchema.methods.generateEmailVerificationToken = function () {
+  return jwt.sign(
+    {
+      _id: this._id,
+    },
+    process.env.EMAIL_VERIFICATION_SECRET,
+    { expiresIn: process.env.EMAIL_VERIFICATION_EXPIRY }
   );
 };
 

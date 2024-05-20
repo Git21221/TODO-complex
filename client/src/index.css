@@ -8,8 +8,13 @@ html, body, input, button{
   background-color: black;
   color: white;
 }
-/* Overriding tailwind properties */
-.bg-zinc-700{
-  border: 1px solid #5f5f5f;
-  background-color: #3f3f3fbd;
+
+#root {
+  height: 100vh;
+}
+
+@media (max-width: 300px){
+  .smallScreen {
+    flex-direction: column;
+  }
 }

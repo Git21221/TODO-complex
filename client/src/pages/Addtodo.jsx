@@ -8,6 +8,7 @@ import { addtodo } from "../APIs/backend.api.js";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../features/login/authSlice.js";
 import { setError, setSuccess } from "../features/messageSlice.js";
+import { useForm } from "react-hook-form";
 
 function Addtodo() {
   const dispatch = useDispatch();
@@ -16,20 +17,16 @@ function Addtodo() {
   const [todoDesc, setTodoDesc] = useState("");
   const navigate = useNavigate();
 
-  const data = { todoName, todoDesc };
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    trigger,
+    control,
+  } = useForm();
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
-
-    if ([todoName, todoDesc].some((field) => field?.trim() === ""))
-      dispatch(
-        setError({
-          isMessage: true,
-          message: "All fields are required!",
-          type: "error",
-        })
-      );
-
+  const submitHandler = async (data) => {
     try {
       const res = await addtodo(data, "POST");
       if (res.ok) {
@@ -63,37 +60,47 @@ function Addtodo() {
 
   if (isAuthenticated) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center bg-zinc-950 flex-col gap-8 text-white">
+      <div className="h-screen max-w-[450px] flex items-center justify-center bg-zinc-950 flex-col gap-8 text-white m-auto">
         <Helmet>
           <title>Add Todo | TODO</title>
         </Helmet>
-        <div className="form bg-zinc-700 p-10 rounded-xl bg-opacity-60 flex flex-col items-center justify-center gap-6">
+        <div className="form bg-neutral-800 border border-neutral-600 lg:p-10 md:p-5 p-5 rounded-2xl w-full flex flex-col items-center justify-center gap-6 mx-5">
           <h1 className="text-3xl font-bold">Add your Todo</h1>
 
           <form
             method="post"
-            className="flex flex-col gap-6"
-            onSubmit={(e) => {
-              e.preventDefault();
-            }}
+            className="flex flex-col gap-6 w-full"
+            onSubmit={handleSubmit(submitHandler)}
           >
             <Input
+              title="Todo Name"
+              name="todoName"
               type="text"
-              placeholder="Todo Name"
-              onChange={(e) => {
-                setTodo(e.target.value);
+              register={register}
+              errors={errors}
+              validation={{
+                required: true,
               }}
+              watch={watch}
+              control={control}
+              trigger={trigger}
             />
             <Input
+              title="Todo Description"
+              name="todoDesc"
               type="text"
-              placeholder="description"
-              onChange={(e) => {
-                setTodoDesc(e.target.value);
+              register={register}
+              errors={errors}
+              validation={{
+                required: true,
               }}
+              watch={watch}
+              control={control}
+              trigger={trigger}
             />
             <button
+            type="submit"
               className="bg-zinc-100 rounded-3xl px-3 py-2 bg-opacity-30 text-black hover:bg-zinc-50 transition-all font-bold"
-              onClick={submitHandler}
             >
               Add
             </button>

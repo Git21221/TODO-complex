@@ -1,26 +1,29 @@
 import React, { useState } from "react";
 import { Input } from "../components/index.js";
 import { useNavigate } from "react-router-dom";
-import { register } from "../APIs/backend.api.js";
+import { registerData } from "../APIs/backend.api.js";
 import { useDispatch } from "react-redux";
 import { setError, setSuccess } from "../features/messageSlice.js";
 import { setLoading } from "../features/loadingSlice.js";
+import { useForm } from "react-hook-form";
 
 function Signup() {
-  const [fullName, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    trigger,
+    control,
+  } = useForm();
 
-  const data = { fullName, email, username, password };
-
-  const submitHandler = async (e) => {
+  const submitHandler = async (data) => {
+    console.log(data);
     dispatch(setLoading({ isLoading: true }));
-    e.preventDefault();
     try {
-      const res = await register(data, "POST");
+      const res = await registerData(data, "POST");
       const userData = await res.json();
 
       if (res.ok) {
@@ -55,47 +58,61 @@ function Signup() {
   };
 
   return (
-    <div className="img-container h-screen w-screen flex items-center justify-center flex-col gap-8 text-white">
-      <div className="form bg-zinc-700 p-10 rounded-2xl bg-opacity-60 backdrop-blur-3xl flex flex-col items-center justify-center gap-6">
+    <div className="h-screen max-w-[450px] flex items-center justify-center flex-col gap-8 text-white m-auto">
+      <div className="form bg-neutral-800 border border-neutral-600 lg:p-10 md:p-5 p-5 rounded-2xl w-full flex flex-col items-center justify-center gap-6 mx-5">
         <h1 className="text-3xl font-bold">Register yourself</h1>
         <form
           method="post"
-          className="flex flex-col gap-6"
-          onSubmit={(e) => {
-            e.preventDefault();
-          }}
+          className="flex flex-col gap-6 w-full"
+          onSubmit={handleSubmit(submitHandler)}
         >
           <Input
+            title={"Full Name"}
+            name="fullName"
             type="text"
-            placeholder="Full Name"
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
+            register={register}
+            watch={watch}
+            trigger={trigger}
+            errors={errors}
+            validation={{ required: true, pattern: /^[a-zA-Z]+$/ }}
           />
           <Input
+            title={"your username"}
+            name="username"
             type="text"
-            placeholder="Username"
-            onChange={(e) => {
-              setUsername(e.target.value);
-            }}
+            register={register}
+            watch={watch}
+            trigger={trigger}
+            errors={errors}
+            validation={{ required: true, pattern: /^[a-zA-Z0-9]+$/ }}
           />
           <Input
+            title="Email"
+            name="email"
             type="email"
-            placeholder="Email"
-            onChange={(e) => {
-              setEmail(e.target.value);
+            register={register}
+            errors={errors}
+            validation={{
+              required: true,
+              pattern: /^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$/,
             }}
+            watch={watch}
+            control={control}
+            trigger={trigger}
           />
           <Input
+            title={"Password"}
+            name="password"
             type="password"
-            placeholder="Password"
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
+            register={register}
+            watch={watch}
+            trigger={trigger}
+            errors={errors}
+            validation={{ required: true, pattern: /^[a-zA-Z0-9]+$/ }}
           />
           <button
-            className="bg-zinc-100 rounded-3xl px-3 py-2 bg-opacity-30 text-black hover:bg-zinc-50 transition-all font-bold"
-            onClick={submitHandler}
+            type="submit"
+            className="bg-zinc-100 rounded-lg px-3 py-2 bg-opacity-30 text-black hover:bg-zinc-50 transition-all font-bold"
           >
             Register
           </button>
