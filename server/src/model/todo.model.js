@@ -4,7 +4,6 @@ const todoSchema = new Schema(
   {
     todoName: {
       type: String,
-      required: true,
       trim: true,
     },
     todoDesc: {

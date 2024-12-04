@@ -181,10 +181,10 @@ const addTodo = asyncHandler(async (req, res) => {
   const { todoName, todoDesc } = req.body;
   const ownerid = req.user._id;
 
-  if ([todoName, todoDesc].some((field) => field === ""))
-    return res.status(400).json(new apiError(401, "All fields are required"));
+  if (!todoDesc)
+    return res.status(400).json(new apiError(401, "Description is required!"));
 
-  const createdtodo = await Todo.create({ todoName, todoDesc, owner: ownerid });
+  const createdtodo = await Todo.create({ todoName: todoName || "", todoDesc, owner: ownerid });
 
   return res
     .status(200)

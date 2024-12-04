@@ -126,10 +126,10 @@ function Alltodos() {
             }}
             onMouseLeave={() => setHover(false)}
             key={todo._id}
-            className="todos p-4 rounded-lg w-72 h-auto bg-zinc-700 bg-opacity-60"
+            className="todos relative p-4 rounded-lg w-72 h-auto bg-zinc-700 bg-opacity-60"
           >
             {hover && hoverTodoId === todo._id && (
-              <div className="controls flex gap-2 relative top-[-24px]">
+              <div className="controls absolute flex gap-2 top-[-8px]">
                 <div className="h-4 bg-red-500 w-4 rounded-3xl flex items-center justify-center text-black">
                   <CloseRoundedIcon style={{ fontSize: "17px", padding: 0 }} />
                 </div>

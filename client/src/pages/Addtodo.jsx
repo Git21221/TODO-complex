@@ -79,7 +79,7 @@ function Addtodo() {
               register={register}
               errors={errors}
               validation={{
-                required: true,
+                required: false,
               }}
               watch={watch}
               control={control}
